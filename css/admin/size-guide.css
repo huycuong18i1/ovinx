@@ -1,0 +1,101 @@
+#dynamic-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#dynamic-table th,
+#dynamic-table td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+}
+
+.tf-metabox-group,
+.tf-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#dynamic-table td {
+    height: 40px;
+    padding: 0;
+    margin: 0;
+}
+
+#dynamic-table .row-input input {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    margin: 0;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+#dynamic-table .row-input:first-child input {
+    font-weight: 500;
+}
+
+#dynamic-table .icon-button {
+    display: inline-block;
+    padding: 5px 10px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#dynamic-table .icon-button.btn-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+#dynamic-table .add-column {
+    background-color: green;
+}
+
+#dynamic-table .remove-column {
+    background-color: red;
+}
+
+#dynamic-table .add-row {
+    background-color: blue;
+}
+
+#dynamic-table .remove-row {
+    background-color: orange;
+}
+
+.image-preview-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.image-preview {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100px;
+    height: auto;
+}
+
+#size-guide-image-button {
+    max-width: 200px;
+}
+
+.remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+    color: red;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+}
+
+.image-preview:hover .remove-image {
+    display: block;
+}

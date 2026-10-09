@@ -1,0 +1,83 @@
+/* TF Product Video */
+#woocommerce-product-data ul.wc-tabs li.tf_video_options a::before {
+    content: "\f235";
+}
+
+#tf_video_product_data .tf-button,
+#tf_3d_viewer_product_data .tf-button,
+.tf-variation-gallery-options_group .tf-button {
+    background: #fff;
+    border: 1px solid #333;
+    color: #333;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 8px;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    max-width: 120px;
+}
+
+#tf_video_product_data .image-preview-container,
+#tf_3d_viewer_product_data .image-preview-container,
+.tf-variation-gallery-options_group .image-preview-container {
+    display: none;
+    /* margin: 10px 0; */
+}
+
+#tf_video_product_data .image-preview,
+#tf_3d_viewer_product_data .image-preview,
+.tf-variation-gallery-options_group .image-preview {
+    display: block;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100px;
+    height: auto;
+    margin: 10px 0;
+}
+
+#tf_video_product_data .remove-image,
+#tf_3d_viewer_product_data .remove-image,
+.tf-variation-gallery-options_group .remove-image {
+    position: absolute;
+    transform: scale(1.5);
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+    color: red;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+}
+
+#tf_video_product_data .image-preview:hover .remove-image,
+#tf_3d_viewer_product_data .image-preview:hover .remove-image,
+.tf-variation-gallery-options_group .image-preview:hover .remove-image {
+    display: block;
+}
+
+.variation-gallery-box {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+.variation-gallery-box .image-preview-container {
+    display: flex;
+    gap: 20px;
+    max-width: 100%;
+    flex-wrap: wrap;
+}
+
+#woocommerce-product-data ul.wc-tabs li.tf_3d_viewer_options a::before {
+    font-family: "vince" !important;
+    content: "\e971" !important;
+}
+
+/* TF Size Guide */
+
+#woocommerce-product-data ul.wc-tabs li.tf_size_guide_options a::before {
+    content: "\f151";
+}

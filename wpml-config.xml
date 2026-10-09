@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wpml-config>
+
+	<admin-texts>
+		<key name="theme_mods_ovinx">
+			<key name="header_title" />
+			<key name="footer_copyright" />
+			<key name="contact_phone" />
+			<key name="contact_email" />
+		</key>
+		<key name="ovinx_options">
+			<key name="home_tagline" />
+			<key name="hero_button_text" />
+			<key name="hero_button_link" />
+		</key>
+	</admin-texts>
+
+
+	<custom-fields>
+		<custom-field action="translate">subtitle</custom-field>
+		<custom-field action="translate">button_text</custom-field>
+		<custom-field action="translate">cta_link</custom-field>
+		<custom-field action="copy">thumbnail_id</custom-field>
+		<custom-field action="copy">gallery_images</custom-field>
+	</custom-fields>
+
+	<shortcodes>
+		<shortcode>
+			<tag>tf_button</tag>
+			<attributes>
+				<attribute>text</attribute>
+				<attribute>link</attribute>
+				<attribute>target</attribute>
+			</attributes>
+		</shortcode>
+
+		<shortcode>
+			<tag>tf_info_box</tag>
+			<attributes>
+				<attribute>title</attribute>
+				<attribute>description</attribute>
+				<attribute>icon</attribute>
+			</attributes>
+		</shortcode>
+	</shortcodes>
+
+
+	<elementor-widgets>
+
+		<!-- TF Image Box -->
+		<widget name="tf-image-box">
+			<fields>
+				<field type="text">title</field>
+				<field type="textarea">description</field>
+				<field type="text">button_text</field>
+				<field type="url">button_link</field>
+			</fields>
+		</widget>
+
+		<!-- TF Group Card -->
+		<widget name="tf-group-card">
+			<fields>
+				<field type="text">heading</field>
+				<field type="text">subheading</field>
+				<field type="textarea">content</field>
+			</fields>
+		</widget>
+
+		<!-- TF Section Process -->
+		<widget name="tf-section-process">
+			<fields>
+				<field type="text">title</field>
+				<field type="textarea">description</field>
+				<field type="repeater">
+					<field type="text">step_title</field>
+					<field type="textarea">step_desc</field>
+				</field>
+			</fields>
+		</widget>
+
+		<widget name="tf-testimonial-carousel">
+			<fields>
+				<field type="repeater">
+					<field type="text">name</field>
+					<field type="text">position</field>
+					<field type="textarea">testimonial</field>
+				</field>
+			</fields>
+		</widget>
+
+	</elementor-widgets>
+
+
+	<acf-field-groups>
+		<group key="group_hero_section">
+			<field key="field_hero_title" />
+			<field key="field_hero_subtitle" />
+			<field key="field_hero_button_text" />
+			<field key="field_hero_button_link" />
+		</group>
+		<group key="group_contact_info">
+			<field key="field_contact_name" />
+			<field key="field_contact_position" />
+			<field key="field_contact_message" />
+		</group>
+	</acf-field-groups>
+
+
+	<custom-types>
+		<custom-type translate="1">portfolio</custom-type>
+		<custom-type translate="1">testimonial</custom-type>
+		<custom-type translate="1">service</custom-type>
+	</custom-types>
+
+	<taxonomies>
+		<taxonomy translate="1">category</taxonomy>
+		<taxonomy translate="1">post_tag</taxonomy>
+		<taxonomy translate="1">portfolio_category</taxonomy>
+	</taxonomies>
+
+	<menus>
+		<menu>primary</menu>
+		<menu>footer</menu>
+	</menus>
+
+	<widgets>
+		<widget name="nav_menu">
+			<fields>
+				<field type="text">title</field>
+			</fields>
+		</widget>
+		<widget name="text">
+			<fields>
+				<field type="textarea">text</field>
+			</fields>
+		</widget>
+	</widgets>
+
+</wpml-config>

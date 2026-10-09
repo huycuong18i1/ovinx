@@ -1,0 +1,44 @@
+.edit-post-meta-boxes-area input {
+    width: 100%;
+}
+
+.themesflat-options-container .themesflat-options-control-inputs textarea,
+.edit-post-meta-boxes-area textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.edit-post-meta-boxes-area textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.cmb2-wrap input[type=radio] {
+    width: auto;
+}
+
+input[type=color].short-input {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+#tfwc_badges_control .wp-picker-input-wrap label {
+    all: unset;
+}
+
+.ocdi__theme-about-screenshots {
+    -webkit-box-flex: 5;
+    -ms-flex: 5;
+    flex: 5;
+}
+
+@media (min-width: 1120px) {
+    .ocdi__gl-item {
+        -ms-flex: 0 0 calc(25% - 30px);
+        flex: 0 0 calc(25% - 30px);
+    }
+}

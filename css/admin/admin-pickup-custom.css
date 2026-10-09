@@ -1,0 +1,5 @@
+.components-modal__frame:not(.frame-loaded) {
+    display: none;
+    visibility: hidden;
+    opacity: 1;
+}

@@ -1,0 +1,58 @@
+$fontIcon: "icomoon";
+$font-main: "Barlow",
+sans-serif;
+$font-manrope: "Manrope",
+sans-serif;
+
+:root {
+    // color
+    --white: #ffffff;
+    --black: #000000;
+    --primary: #ea0f5b;
+
+    --main: #1a1a1a;
+
+    --text-primary: #1d358f;
+    --text-secondary: #717171;
+    --text-mute: #aab0bb;
+
+    --line: #e4e4e4;
+
+    --surface: #F1F4F8;
+
+    --bg: #05326F;
+    --bg-2: #E8EDF6;
+
+    @for $i from 11 through 99 {
+        --black_#{$i}: rgba(0, 0, 0, 0.#{$i});
+    }
+
+    @for $i from 10 through 99 {
+        --white_#{$i}: rgba(255, 255, 255, 0.#{$i});
+    }
+
+
+    --critical:#DC2626;
+    --success:#16A34A;
+    --yellow:#F59E0B;
+    --elevationshadow: #0000000a;
+    --shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+
+    --animation-nav: 0.5s cubic-bezier(0.6, 0, 0.4, 1);
+    --animation-default: 0.5s cubic-bezier(0.3, 1, 0.3, 1);
+    --animation-fast: 0.3s cubic-bezier(0.7, 0, 0.3, 1);
+    --transform-origin-start: left;
+    --transform-origin-end: right;
+    --duration-default: 200ms;
+    --duration-image: 1000ms;
+
+    // Font Size
+    --h3-fs: clamp(24px, 3.4vw, 36px);
+    --h3-lh: clamp(32px, 4.2vw, 44px);
+    --h4-fs: clamp(22px, 2.6vw, 30px);
+    --h4-lh: clamp(28px, 3.2vw, 42px);
+    --h5-fs:clamp(20px, 2.6vw, 24px);
+    --h5-lh:clamp(28px, 3.2vw, 30px);
+    --caption-fs: 14px;
+    --caption-lh: 20px;
+}

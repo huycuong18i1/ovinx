@@ -1,0 +1,617 @@
+/* ==========================================================================
+   Ovinx — WordPress core content styles (WP "Theme Unit Test" / Gutenberg test data)
+
+   styles.css resets almost everything (ul/li lose bullets, blockquote/table/pre are bare, margins are 0, `a` is
+   inline-flex) because the design only ever shows hand-built, class-based markup. Real editor content — classic
+   editor HTML and core blocks — needs its own typography. Everything here is deliberately scoped to:
+     - elements WITHOUT a class (`p:not([class])`, `ul:not([class])` …) and
+     - WordPress' own classes (`.wp-block-*`, `.alignleft`, `.wp-caption`, `.gallery` …)
+   so the class-based design markup (p.entry-text, ul.entry-text_list, div.quote-single …) is never touched.
+   Loaded after styles.css (see functions.php). Uses the :root tokens from styles.css.
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   0. Content scopes
+   .entry-content            pages / archive excerpts
+   .single-content_body      single post body
+   .infor__desc              comment text
+   .textwidget, .widget_text classic text widgets
+   ------------------------------------------------------------------------- */
+
+/* A single post body is a CSS grid with a 40px gap (design). When it holds ordinary editor content, switch to normal
+   flow so floats / alignments work and spacing comes from margins. Class-only design bodies are left alone. */
+.single-content_body:has(> :is(p, ul, ol, h1, h2, h3, h4, h5, h6, blockquote, pre, table, hr, dl, address, audio, video, iframe, figure, [class*="wp-block-"], .wp-caption, .alignleft, .alignright, .aligncenter, .gallery):not([class])),
+.single-content_body:has(> [class*="wp-block-"], > .wp-caption, > .alignleft, > .alignright, > .aligncenter, > .gallery, > .wp-video, > .wp-audio-shortcode) {
+  display: block;
+}
+
+/* Contain floated images / captions so they never spill into the comments or footer ("Clearing Floats"). */
+.entry-content::after,
+.single-content_body::after,
+.infor__desc::after,
+.wp-block-group__inner-container::after,
+.wp-block-column::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Vertical rhythm between sibling blocks */
+:is(.entry-content, .infor__desc, .textwidget, .widget_text, .wp-block-group__inner-container, .wp-block-column, .wp-block-media-text__content, .wp-block-cover__inner-container, .wp-block-details) > * + *,
+.single-content_body:not(:has(> .entry-image, > .d-grid, > .quote-single)) > * + * {
+  margin-top: 24px;
+}
+
+/* -------------------------------------------------------------------------
+   1. Headings
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) :is(h1, h2, h3, h4, h5, h6):not([class]),
+:is(.entry-content, .single-content_body) :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+  line-height: 1.25;
+  margin-top: 1.6em;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+:is(.entry-content, .single-content_body, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) :is(h1, h2, h3, h4, h5, h6):not([class]):first-child,
+:is(.entry-content, .single-content_body) :is(h1, h2, h3, h4, h5, h6).wp-block-heading:first-child {
+  margin-top: 0;
+}
+:is(.entry-content, .single-content_body) h1:not([class]), :is(.entry-content, .single-content_body) h1.wp-block-heading { font-size: 40px; line-height: 48px; }
+:is(.entry-content, .single-content_body) h2:not([class]), :is(.entry-content, .single-content_body) h2.wp-block-heading { font-size: 32px; line-height: 40px; }
+:is(.entry-content, .single-content_body) h3:not([class]), :is(.entry-content, .single-content_body) h3.wp-block-heading { font-size: 26px; line-height: 34px; }
+:is(.entry-content, .single-content_body) h4:not([class]), :is(.entry-content, .single-content_body) h4.wp-block-heading { font-size: 22px; line-height: 30px; }
+:is(.entry-content, .single-content_body) h5:not([class]), :is(.entry-content, .single-content_body) h5.wp-block-heading { font-size: 18px; line-height: 26px; }
+:is(.entry-content, .single-content_body) h6:not([class]), :is(.entry-content, .single-content_body) h6.wp-block-heading { font-size: 16px; line-height: 24px; text-transform: uppercase; letter-spacing: 0.04em; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(h1, h2, h3, h4, h5, h6):not([class]) + * {
+  margin-top: 12px;
+}
+@media (max-width: 767px) {
+  :is(.entry-content, .single-content_body) h1:not([class]), :is(.entry-content, .single-content_body) h1.wp-block-heading { font-size: 30px; line-height: 38px; }
+  :is(.entry-content, .single-content_body) h2:not([class]), :is(.entry-content, .single-content_body) h2.wp-block-heading { font-size: 26px; line-height: 34px; }
+  :is(.entry-content, .single-content_body) h3:not([class]), :is(.entry-content, .single-content_body) h3.wp-block-heading { font-size: 22px; line-height: 30px; }
+}
+/* headings pasted into a comment must not look like page titles */
+.infor__desc :is(h1, h2, h3, h4, h5, h6):not([class]) {
+  margin-top: 1em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.infor__desc h1:not([class]) { font-size: 24px; }
+.infor__desc h2:not([class]) { font-size: 22px; }
+.infor__desc h3:not([class]) { font-size: 20px; }
+.infor__desc h4:not([class]) { font-size: 18px; }
+.infor__desc h5:not([class]) { font-size: 16px; }
+.infor__desc h6:not([class]) { font-size: 14px; text-transform: uppercase; }
+
+/* -------------------------------------------------------------------------
+   2. Text, links, inline elements
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(p, li, dd, td, th):not([class]) {
+  overflow-wrap: break-word;
+}
+/* `a` is inline-flex globally: inside running text that breaks wrapping and underlines */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) a:not([class]),
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(p, li, td, dd, figcaption, blockquote) > a:not(.tf-btn),
+:is(.entry-content, .single-content_body) .wp-element-caption a {
+  display: inline;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) a:not([class]):hover,
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(p, li, td, dd, figcaption, blockquote) > a:not(.tf-btn):hover {
+  color: var(--primary);
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(strong, b) {
+  font-weight: 700;
+  color: var(--main);
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(em, i, cite, dfn, var):not([class]) {
+  font-style: italic;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(abbr[title], acronym[title]) {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) mark {
+  background: #fff2a8;
+  color: var(--main);
+  padding: 0 3px;
+  border-radius: 2px;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) ins { text-decoration: underline; background: transparent; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(del, s, strike) { text-decoration: line-through; opacity: 0.8; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(sub, sup) { font-size: 0.75em; line-height: 0; position: relative; vertical-align: baseline; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) sup { top: -0.5em; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) sub { bottom: -0.25em; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) small { font-size: 0.875em; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) big { font-size: 1.25em; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) q { quotes: "\201C" "\201D" "\2018" "\2019"; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) q::before { content: open-quote; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) q::after { content: close-quote; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) address { font-style: italic; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) :is(center, .has-text-align-center) { text-align: center; }
+.has-text-align-left { text-align: left; }
+.has-text-align-right { text-align: right; }
+.has-text-align-center { text-align: center; }
+.has-text-align-justify { text-align: justify; }
+.has-drop-cap:not(:focus)::first-letter { font-size: 4.2em; line-height: 0.8; font-weight: 600; float: left; margin: 0.05em 0.12em 0 0; color: var(--text-primary); }
+
+/* -------------------------------------------------------------------------
+   3. Lists
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) :is(ul, ol):not([class]),
+:is(ul, ol).wp-block-list {
+  padding-left: 1.6em;
+  list-style-position: outside;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) ul:not([class]),
+ul.wp-block-list { list-style: disc; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) ol:not([class]),
+ol.wp-block-list { list-style: decimal; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column, .wp-block-media-text__content) :is(ul, ol):not([class]) li:not([class]),
+:is(ul, ol).wp-block-list > li {
+  list-style: inherit;
+  display: list-item;
+  margin-bottom: 6px;
+  overflow-wrap: break-word;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) :is(ul, ol):not([class]) :is(ul, ol):not([class]) {
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) ul:not([class]) ul:not([class]) { list-style: circle; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) ul:not([class]) ul:not([class]) ul:not([class]) { list-style: square; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) ol:not([class]) ol:not([class]) { list-style: lower-alpha; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) ol:not([class]) ol:not([class]) ol:not([class]) { list-style: lower-roman; }
+ol[reversed] { direction: ltr; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) dl:not([class]) { margin-bottom: 0; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) dt:not([class]) { font-weight: 600; color: var(--main); margin-top: 12px; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) dd:not([class]) { margin: 4px 0 0 1.6em; }
+
+/* -------------------------------------------------------------------------
+   4. Blockquote / pullquote / verse
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) blockquote:not([class]),
+.wp-block-quote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 20px 24px;
+  background: var(--surface);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  font-size: 1.05em;
+  color: var(--main);
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) blockquote:not([class]) > * + *,
+.wp-block-quote > * + * { margin-top: 12px; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) blockquote:not([class]) :is(p, ul, ol),
+.wp-block-quote :is(p, ul, ol) { color: inherit; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) blockquote:not([class]) blockquote:not([class]),
+.wp-block-quote .wp-block-quote { background: #fff; margin-top: 12px; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) blockquote:not([class]) :is(cite, footer),
+.wp-block-quote :is(cite, footer),
+.wp-block-quote__citation,
+.wp-block-pullquote cite {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 22px;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: none;
+}
+.wp-block-quote.is-style-plain, .wp-block-quote.is-large { background: transparent; }
+.wp-block-pullquote {
+  margin: 0;
+  padding: 32px 24px;
+  text-align: center;
+  border-top: 4px solid var(--primary);
+  border-bottom: 4px solid var(--primary);
+  color: var(--main);
+}
+.wp-block-pullquote blockquote { background: transparent; border: 0; padding: 0; margin: 0; }
+.wp-block-pullquote p { font-size: 24px; line-height: 34px; font-weight: 500; }
+.wp-block-pullquote.alignleft, .wp-block-pullquote.alignright { max-width: 320px; }
+:is(.entry-content, .single-content_body) :is(.wp-block-verse, pre.wp-block-verse) {
+  font-family: inherit;
+  white-space: pre-wrap;
+  background: var(--surface);
+  padding: 20px 24px;
+  border-radius: 8px;
+  border: 0;
+}
+
+/* -------------------------------------------------------------------------
+   5. Code, preformatted, keyboard
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) :is(pre, code, kbd, samp, tt):not(.wp-block-verse),
+.wp-block-code, .wp-block-preformatted {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.875em;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) pre:not(.wp-block-verse),
+.wp-block-code,
+.wp-block-preformatted {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 20px;
+  line-height: 1.6;
+  color: var(--main);
+  white-space: pre;
+  overflow: auto;
+  max-width: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+.wp-block-preformatted { white-space: pre-wrap; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) code:not(.wp-block-code code) {
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  overflow-wrap: anywhere;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) pre code,
+.wp-block-code code { background: transparent; border: 0; padding: 0; color: inherit; font-size: 1em; overflow-wrap: normal; }
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) kbd {
+  background: var(--main);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 500;
+  box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* -------------------------------------------------------------------------
+   6. Tables
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) table:not([class]),
+.wp-block-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  font-size: 0.95em;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) table:not([class]) :is(th, td),
+.wp-block-table :is(th, td) {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: break-word;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text, .wp-block-group, .wp-block-column) table:not([class]) :is(th, thead td),
+.wp-block-table :is(th, thead td) {
+  background: var(--surface);
+  color: var(--main);
+  font-weight: 600;
+}
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) table:not([class]) caption,
+.wp-block-table figcaption {
+  caption-side: bottom;
+  padding: 8px 0 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.wp-block-table { overflow-x: auto; }
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd) { background: var(--surface); }
+.wp-block-table.is-style-stripes { border: 0; }
+.wp-block-table figure { margin: 0; }
+:is(.entry-content, .single-content_body) table:not([class]) tbody tr:nth-child(even) td { background: rgba(241, 244, 248, 0.5); }
+@media (max-width: 767px) {
+  :is(.entry-content, .single-content_body, .infor__desc) table:not([class]) { display: block; overflow-x: auto; }
+}
+
+/* -------------------------------------------------------------------------
+   7. Separators, spacer, details, file
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) hr:not([class]),
+.wp-block-separator {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 32px 0;
+  height: 0;
+  opacity: 1;
+  background: none;
+}
+.wp-block-separator.is-style-wide { border-top-width: 2px; }
+.wp-block-separator.is-style-dots { border: 0; text-align: center; line-height: 1; height: auto; }
+.wp-block-separator.is-style-dots::before { content: "\00b7 \00b7 \00b7"; letter-spacing: 1em; padding-left: 1em; color: var(--text-mute); font-size: 24px; }
+.wp-block-spacer { clear: both; }
+.wp-block-details { border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; }
+.wp-block-details summary { cursor: pointer; font-weight: 600; color: var(--main); }
+.wp-block-details[open] summary { margin-bottom: 12px; }
+.wp-block-file { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.wp-block-file__button { display: inline-flex; padding: 8px 18px; background: var(--primary); color: #fff; font-weight: 600; }
+
+/* -------------------------------------------------------------------------
+   8. Images, captions, alignment, media
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .infor__desc, .textwidget, .widget_text) figure { margin: 0; }
+:is(.entry-content, .single-content_body) img { max-width: 100%; height: auto; }
+:is(.entry-content, .single-content_body) :is(p, figure, .wp-block-image) > img.alignnone,
+:is(.entry-content, .single-content_body) .alignnone { margin: 0 0 1em; }
+:is(.entry-content, .single-content_body) :is(figcaption, .wp-element-caption, .wp-caption-text, .gallery-caption) {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+:is(.entry-content, .single-content_body) .wp-caption.alignleft, :is(.entry-content, .single-content_body) .wp-block-image.alignleft, :is(.entry-content, .single-content_body) figure.alignleft { float: left; margin: 0.4em 1.5em 1em 0; max-width: 50%; }
+:is(.entry-content, .single-content_body) .wp-caption.alignright, :is(.entry-content, .single-content_body) .wp-block-image.alignright, :is(.entry-content, .single-content_body) figure.alignright { float: right; margin: 0.4em 0 1em 1.5em; max-width: 50%; }
+:is(.entry-content, .single-content_body) .wp-caption.aligncenter, :is(.entry-content, .single-content_body) .wp-block-image.aligncenter, :is(.entry-content, .single-content_body) figure.aligncenter { display: block; clear: both; margin-left: auto; margin-right: auto; }
+:is(.entry-content, .single-content_body) .wp-block-image.aligncenter img { margin-left: auto; margin-right: auto; }
+.wp-caption.alignleft img, .wp-caption.alignright img { display: block; }
+@media (max-width: 575px) {
+  :is(.entry-content, .single-content_body) .alignleft, :is(.entry-content, .single-content_body) .alignright { float: none; display: block; margin: 0 auto 1em; max-width: 100%; }
+}
+:is(.entry-content, .single-content_body) :is(.alignwide, .alignfull) { max-width: 100%; width: 100%; }
+:is(.entry-content, .single-content_body) .wp-block-image img { display: block; }
+:is(.entry-content, .single-content_body) .wp-block-image .aligncenter, :is(.entry-content, .single-content_body) .wp-block-image.aligncenter img { margin-left: auto; margin-right: auto; }
+:is(.entry-content, .single-content_body) .wp-block-image.is-style-rounded img { border-radius: 9999px; }
+:is(.entry-content, .single-content_body) iframe, :is(.entry-content, .single-content_body) embed, :is(.entry-content, .single-content_body) object { max-width: 100%; }
+:is(.entry-content, .single-content_body, .infor__desc) :is(audio, .wp-audio-shortcode) { width: 100%; display: block; }
+/* styles.css forces every <video> to 100%x100% cover — wrong for content video */
+:is(.entry-content, .single-content_body, .infor__desc) video { height: auto; object-fit: contain; max-width: 100%; }
+:is(.entry-content, .single-content_body) .wp-block-embed__wrapper { max-width: 100%; overflow: hidden; }
+:is(.entry-content, .single-content_body) .wp-block-embed.is-type-video .wp-block-embed__wrapper iframe { width: 100%; }
+:is(.entry-content, .single-content_body) .twitter-tweet { margin-left: auto; margin-right: auto; }
+
+/* Classic [gallery] */
+:is(.entry-content, .single-content_body) .gallery { display: flex; flex-wrap: wrap; gap: 12px; margin-left: 0; margin-right: 0; }
+:is(.entry-content, .single-content_body) .gallery .gallery-item { margin: 0; flex: 0 0 calc((100% - 12px * (var(--gallery-cols, 3) - 1)) / var(--gallery-cols, 3)); max-width: 100%; text-align: center; }
+:is(.entry-content, .single-content_body) .gallery-columns-1 { --gallery-cols: 1; }
+:is(.entry-content, .single-content_body) .gallery-columns-2 { --gallery-cols: 2; }
+:is(.entry-content, .single-content_body) .gallery-columns-3 { --gallery-cols: 3; }
+:is(.entry-content, .single-content_body) .gallery-columns-4 { --gallery-cols: 4; }
+:is(.entry-content, .single-content_body) .gallery-columns-5 { --gallery-cols: 5; }
+:is(.entry-content, .single-content_body) .gallery-columns-6 { --gallery-cols: 6; }
+:is(.entry-content, .single-content_body) .gallery-columns-7 { --gallery-cols: 7; }
+:is(.entry-content, .single-content_body) .gallery-columns-8 { --gallery-cols: 8; }
+:is(.entry-content, .single-content_body) .gallery-columns-9 { --gallery-cols: 9; }
+:is(.entry-content, .single-content_body) .gallery .gallery-icon img { width: 100%; height: auto; display: block; }
+@media (max-width: 575px) { :is(.entry-content, .single-content_body) .gallery .gallery-item { flex-basis: calc((100% - 12px) / 2); } }
+
+/* Gallery block: the layout-support CSS (gap) is switched off in functions.php, so give it a gap here */
+.wp-block-gallery { --wp--style--unstable-gallery-gap: 16px; gap: 16px; }
+.wp-block-gallery.has-nested-images figure.wp-block-image { margin: 0; }
+.wp-block-gallery.has-nested-images figcaption { color: #fff; font-size: 13px; }
+
+/* -------------------------------------------------------------------------
+   9. Layout blocks: columns, group, media & text, cover, buttons
+   ------------------------------------------------------------------------- */
+.wp-block-columns { gap: 32px; }
+.wp-block-columns.are-vertically-aligned-center { align-items: center; }
+@media (max-width: 781px) { .wp-block-columns { gap: 24px; } }
+.wp-block-group.has-background { padding: 24px; }
+.wp-block-media-text { gap: 0; }
+.wp-block-media-text .wp-block-media-text__content { padding: 0 8%; }
+.wp-block-media-text .wp-block-media-text__content > * + * { margin-top: 12px; }
+.wp-block-cover, .wp-block-cover-image { margin-bottom: 0; }
+.wp-block-cover .wp-block-cover__inner-container > * + * { margin-top: 12px; }
+.wp-block-cover .wp-block-cover__inner-container :is(h1, h2, h3, h4, h5, h6, p) { color: inherit; }
+.wp-block-cover.alignleft, .wp-block-cover.alignright { max-width: 320px; }
+
+.wp-block-buttons { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.wp-block-button { margin: 0; }
+.wp-block-button__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  border-radius: 0;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+.wp-block-button__link:not(.has-background) { background-color: var(--primary); }
+.wp-block-button__link:not(.has-text-color) { color: #fff; }
+.wp-block-button__link:not(.has-background):hover { background-color: var(--text-primary); color: #fff; }
+.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-background) { background: transparent; }
+.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color) { color: var(--primary); }
+.wp-block-button.is-style-outline > .wp-block-button__link { border: 2px solid currentColor; padding: 10px 26px; }
+.wp-block-button.is-style-outline > .wp-block-button__link:not(.has-background):hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+.wp-block-button.is-style-squared .wp-block-button__link { border-radius: 0; }
+.wp-block-button.is-style-fill .wp-block-button__link { border-radius: 0; }
+
+/* -------------------------------------------------------------------------
+   10. Core widgets / blocks that print lists
+   ------------------------------------------------------------------------- */
+.wp-block-latest-posts__list { display: grid; gap: 12px; }
+.wp-block-latest-posts__post-date, .wp-block-latest-posts__post-author { display: block; font-size: 13px; color: var(--text-secondary); }
+.wp-block-latest-posts__featured-image img { max-width: 100%; height: auto; }
+.wp-block-latest-comments { padding: 0; }
+.wp-block-latest-comments__comment { margin-bottom: 14px; font-size: 15px; line-height: 24px; }
+.wp-block-latest-comments__comment-excerpt p { margin: 4px 0 0; font-size: 14px; color: var(--text-secondary); }
+:is(.wp-block-categories, .wp-block-archives, .wp-block-page-list, .wp-block-rss) { padding-left: 0; }
+.wp-block-categories-list, .wp-block-archives-list, .wp-block-page-list { display: grid; gap: 8px; }
+:is(.wp-block-categories-list, .wp-block-archives-list) :is(ul.children, .children) { margin: 8px 0 0 16px; display: grid; gap: 8px; }
+.wp-block-categories-dropdown select, .wp-block-archives-dropdown select, .widget select { width: 100%; }
+.wp-block-tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.wp-block-tag-cloud a, .tagcloud a {
+  display: inline-flex;
+  font-size: 14px !important;
+  line-height: 22px;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  color: var(--main);
+  transition: all 0.3s ease;
+}
+.tagcloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.wp-block-tag-cloud a:hover, .tagcloud a:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+.wp-block-rss { display: grid; gap: 16px; list-style: none; }
+.wp-block-rss__item-title a { font-weight: 600; color: var(--text-primary); }
+.wp-block-rss__item-publish-date, .wp-block-rss__item-author { font-size: 13px; color: var(--text-secondary); }
+.wp-block-social-links { display: flex; flex-wrap: wrap; gap: 12px; padding: 0; }
+.wp-block-social-links .wp-social-link a { padding: 8px; display: inline-flex; }
+.wp-block-calendar table, #wp-calendar { width: 100%; border: 0; font-size: 14px; }
+.wp-block-calendar :is(th, td), #wp-calendar :is(th, td) { padding: 6px 4px; text-align: center; border: 0; }
+.wp-block-calendar caption, #wp-calendar caption { padding-bottom: 10px; font-weight: 600; color: var(--main); text-align: left; }
+.wp-block-calendar tbody td a, #wp-calendar tbody td a { display: inline-flex; padding: 0 6px; background: var(--primary); color: #fff; }
+.wp-block-calendar tfoot td, #wp-calendar tfoot td { text-align: left; padding-top: 10px; }
+
+/* Search block / form fields printed by core */
+.wp-block-search__inside-wrapper { display: flex; gap: 8px; }
+.wp-block-search__label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--main); }
+.wp-block-search__input, .search-field {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--main);
+}
+.wp-block-search__input:focus { outline: 0; border-color: var(--text-primary); }
+.wp-block-search__button {
+  height: 44px;
+  padding: 0 20px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.wp-block-search__button:hover { background: var(--text-primary); }
+.wp-block-search.wp-block-search__button-only .wp-block-search__button { padding: 0 14px; }
+.wp-block-search__button.has-icon svg { fill: currentColor; }
+
+/* Password-protected post form */
+.post-password-form { display: grid; gap: 12px; padding: 24px; border: 1px solid var(--line); background: var(--surface); }
+.post-password-form p { margin: 0; }
+.post-password-form label { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-weight: 600; }
+.post-password-form input[type="password"] { height: 44px; padding: 0 14px; border: 1px solid var(--line); background: #fff; min-width: 220px; }
+.post-password-form input[type="submit"] { height: 44px; padding: 0 24px; background: var(--primary); color: #fff; border: 0; font-weight: 600; cursor: pointer; }
+.post-password-form input[type="submit"]:hover { background: var(--text-primary); }
+
+/* Paginated posts ( <!--nextpage--> ) */
+.page-links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 32px; font-weight: 600; color: var(--main); }
+.page-links > a, .page-links > .post-page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  color: var(--main);
+}
+.page-links > .post-page-numbers.current { background: var(--primary); border-color: var(--primary); color: #fff; }
+.page-links > a:hover { border-color: var(--primary); color: var(--primary); }
+
+/* -------------------------------------------------------------------------
+   11. Sticky post, sidebar & footer widgets
+   ------------------------------------------------------------------------- */
+.article-blog.sticky { position: relative; padding-left: 20px; border-left: 4px solid var(--primary); }
+.article-blog.sticky .blog-content::before {
+  content: "Featured";
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--primary);
+}
+
+/* Core (block) widgets in the blog sidebar print a big page-sized heading; shrink to a widget title */
+.sidebar-content-wrap { display: grid; gap: 40px; }
+.s-blog-list .sidebar-content-wrap {
+  gap: 0px;
+}
+.sidebar-content-wrap :is(.widget-title, .wp-block-heading, h2, h3, h4):not(.wp-block-search__label) {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+.sidebar-content-wrap .widget ul { display: grid; gap: 10px; flex-wrap: wrap; }
+.widget-popular-tags .sb-tag {
+  display: flex !important;
+  flex-wrap: wrap;}
+.sidebar-content-wrap .widget ul ul { margin: 10px 0 0 16px; }
+.sidebar-content-wrap .widget li > a { color: var(--main); transition: color 0.3s ease; }
+.sidebar-content-wrap .widget li > a:hover { color: #fff; }
+.sidebar-content-wrap .widget :is(.post-count, li > span) { color: var(--text-secondary); font-size: 14px; }
+
+/* Footer widget lists (classic + block widgets) on the dark footer */
+.tf-footer .footer-col-block.widget { color: rgba(255, 255, 255, 0.78); font-size: 15px; line-height: 24px; }
+.tf-footer .footer-col-block.widget :is(.widget-title, .wp-block-heading, h2, h3, h4):not(.footer-heading) { color: #fff; font-size: 16px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; }
+.tf-footer .footer-col-block.widget ul { display: grid; gap: 8px; }
+.tf-footer .footer-col-block.widget li a { color: rgba(255, 255, 255, 0.78); transition: color 0.3s ease; }
+.tf-footer .footer-col-block.widget li a:hover { color: #fff; }
+.tf-footer .footer-col-block.widget :is(select, input[type="text"], input[type="search"]) { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); height: 40px; padding: 0 12px; }
+.tf-footer .footer-col-block.widget select option { color: var(--main); }
+.tf-footer .footer-col-block.widget :is(table, caption, th, td, #wp-calendar) { color: rgba(255, 255, 255, 0.85); }
+.tf-footer .footer-col-block.widget .wp-calendar-nav a, .tf-footer .footer-col-block.widget #wp-calendar tbody td a { color: #fff; }
+
+/* -------------------------------------------------------------------------
+   12. Generic form controls inside content (classic widgets, shortcodes, plugins)
+   ------------------------------------------------------------------------- */
+:is(.entry-content, .single-content_body, .textwidget, .widget_text) :is(input[type="text"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], textarea, select):not([class]) {
+  width: 100%;
+  max-width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--main);
+}
+:is(.entry-content, .single-content_body, .textwidget, .widget_text) :is(input[type="submit"], input[type="button"], button[type="submit"]):not([class]) {
+  padding: 10px 24px;
+  background: var(--primary);
+  color: #fff;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+:is(.entry-content, .single-content_body, .textwidget, .widget_text) :is(input[type="submit"], input[type="button"], button[type="submit"]):not([class]):hover { background: var(--text-primary); }
+
+/* -------------------------------------------------------------------------
+   13. Deep menus
+   A 10-level menu (WP unit-test "Depth" menu) stacks hidden absolute sub-menus 200px apart to the right, which makes the
+   whole page scroll sideways. `clip` (unlike `hidden`) creates no scroll container, so the sticky header keeps working.
+   ------------------------------------------------------------------------- */
+.themesflat-boxed { overflow-x: clip; }
+
+/* Blog list without a column class (style-standard / search results): the implicit auto track grew to the widest unwrapped
+   item (pages printed in full inside a search list) and pushed the whole list past its column. */
+.tf-grid-layout.wrap-blog-article:not([class*="-col-"]) { grid-template-columns: minmax(0, 1fr); }
+
+/* -------------------------------------------------------------------------
+   14. Long words / deep threads
+   ------------------------------------------------------------------------- */
+.entry-name, .article-blog .entry-title, .infor__name, .entry-meta { overflow-wrap: anywhere; }
+.wg-comment .cmt_infor { min-width: 0; }
+.infor__desc { overflow-wrap: anywhere; }
+/* 10-level threaded comments: 20px per level (styles.css) leaves no room for the text at phone width */
+@media (max-width: 575px) {
+  .wg-comment .comment-item > .children,
+  .wg-comment .comment-item > .wg-leave-comment { padding-left: 8px; }
+}
+/* stop indenting after the 4th reply level (unit-test data nests 10 deep) */
+.wg-comment .children .children .children .children { padding-left: 0; }
+/* comment list is a grid with an auto track: let it shrink to the column instead of the widest unwrapped child */
+.wg-comment .list-comment { grid-template-columns: minmax(0, 1fr); }
+.wg-comment .list-comment li.comment-item { min-width: 0; }
+.wg-comment .cmt_infor { grid-template-columns: minmax(0, 1fr); flex: 1 1 0; }
+.infor__desc :is(img, video, iframe, embed, object, table, pre) { max-width: 100%; }
+.infor__desc img, .infor__desc video { height: auto; }

@@ -1,0 +1,64 @@
+
+.widget-facet{
+
+    #categories{
+        .tf-check{
+            display: none;
+        }
+    }
+
+    .rate-list{
+        display: flex;
+        align-items: center;
+
+        > * {
+            display: flex;
+        }
+    }
+
+    input[type="radio"]{
+        position: relative;
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        appearance: none;
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(154, 154, 154);
+        border-image: initial;
+        border-radius: 50%;
+        background: none;
+        outline: 0px;
+
+        &::before{
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--black);
+            opacity: 0;
+            border-radius: 50%;
+        }
+
+        &:checked{
+            border-color: var(--black);
+            &::before{
+                opacity: 1;
+            }
+        }
+    }
+
+    .tf-check.active + label {
+        font-weight: 700;
+    }
+
+    .price-val{
+        &::before{
+            display: none;
+        }
+    }
+
+}
