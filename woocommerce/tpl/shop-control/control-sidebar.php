@@ -22,7 +22,9 @@ $count = isset( $wp_query->found_posts ) ? $wp_query->found_posts : 0;
 
         $number_view = isset($_GET['number_view']) && is_numeric($_GET['number_view']) ? (int) $_GET['number_view'] : themesflat_get_opt('number_view');
         $number_view = max(2, min(4, (int) $number_view)); // only 2-4 columns have a switch icon + responsive classes
+        $number_view = min($number_view, 3); // sidebar layouts are only 9/12 wide: no 4-column switch (ovinx-html/shop-left-sidebar.html)
         $number_view_active = isset($_GET['number_view_active']) && is_numeric($_GET['number_view_active']) ? (int) $_GET['number_view_active'] : themesflat_get_opt('number_view_active');
+        $number_view_active = ovinx_shop_sidebar_column_limit( $number_view_active );
 
         $product_style = isset($_GET['product_style']) ? $_GET['product_style'] : themesflat_get_opt('product_style');
         if (isset($_POST['product_style'])) {

@@ -1355,3 +1355,46 @@ function ovinx_wishlist_clear_all_action() {
 }
 add_action( 'wp_loaded', 'ovinx_wishlist_clear_all_action', 25 );
 // Lives here (not in woocommerce/tpl/product-base/wishlish.php): that file is only loaded on the `wp` hook, after `wp_loaded`.
+
+/**
+ * Shop layouts with a filter sidebar (Left / Right Sidebar) are only 9/12 wide, so they offer 2-3 product columns
+ * (3 by default, no 4-column switch), like ovinx-html/shop-left-sidebar.html. The full-width layouts keep 2-4.
+ *
+ * @param int $number_view_active Column count that is currently active (1 = list view).
+ * @return int Max columns and the column count to use for this shop layout.
+ */
+function ovinx_shop_sidebar_column_limit( $number_view_active = 0 ) {
+	$layout = isset( $_GET['sidebar'] ) ? sanitize_text_field( wp_unslash( $_GET['sidebar'] ) ) : themesflat_get_opt( 'shop_layout' );
+
+	// The search results page uses the full-width toolbar (it has no sidebar column), so it keeps 2-4 columns too.
+	if ( is_search() || ( 'sidebar-left' !== $layout && 'sidebar-right' !== $layout ) ) {
+		return (int) $number_view_active;
+	}
+
+	return (int) $number_view_active > 3 ? 3 : (int) $number_view_active;
+}
+
+/**
+ * Short URL switch for the shop view: /shop/?style_product=list opens the list view, ?style_product=grid the grid view
+ * (back to 4 columns when the Customizer default is the list). Every template reads the active view through
+ * themesflat_get_opt( 'number_view_active' ) (1 = list, 2-4 = columns), so overriding the theme mod here covers them all.
+ * The older ?number_view_active=N URL keeps working and wins over this one.
+ */
+function ovinx_shop_view_from_url( $value ) {
+	if ( is_admin() || empty( $_GET['style_product'] ) || isset( $_GET['number_view_active'] ) ) {
+		return $value;
+	}
+
+	$view = sanitize_key( wp_unslash( $_GET['style_product'] ) );
+
+	if ( 'list' === $view ) {
+		return '1';
+	}
+
+	if ( 'grid' === $view ) {
+		return 1 === (int) $value ? '4' : $value;
+	}
+
+	return $value;
+}
+add_filter( 'theme_mod_number_view_active', 'ovinx_shop_view_from_url' );

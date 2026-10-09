@@ -149,7 +149,7 @@ function tfwc_wishlist_count($data) {
 
     // Class list must cover BOTH contexts this selector matches: desktop header
     // (.nav-icon-list .nav-icon-item.has-number .number-order) and mobile bottom
-    // toolbar (.tf-toolbar-bottom .toolbar-count) — see CLAUDE.md fragment-overwrite note.
+    // toolbar (.tf-toolbar-bottom .toolbar-count) — the AJAX fragment overwrites the template badge, so both must match.
     $data['.wishlist-btn-fragment .count-box'] = '<span class="number-order toolbar-count count-box whishlist-items-count">'. $wishlist_count . '</span>';
 
     return $data;

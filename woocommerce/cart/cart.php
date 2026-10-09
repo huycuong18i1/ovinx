@@ -56,41 +56,42 @@ if ( is_cart() && isset($_GET[themesflat_get_opt('tf_buy_now_query_arg')]) && fu
 
 <?php set_query_var('mini_cart_quantity', true); ?>
 <div class="s-shop-cart section-shoping-cart each-list-prd">
-	<?php if ( isset( WC()->session ) && WC()->session->has_session() ): ?>
-		<?php
-
-			$session_array = (array) WC()->session;
-
-			$expiration = $session_array["\0*\0_session_expiration"];
-			$expiring   = $session_array["\0*\0_session_expiring"];
-
-			$expiration_time = $expiration - time();
-			
-		?>
-
-		<?php if( $expiration_time > 0 && $expiration_time < 7200000 ) : ?>
-			<div class="tf-cart-sold">
-				<div class="notification-sold">
-					<div class="count-text text-caption-01 cl-text-main">
-					<?php
-						printf(
-							/* translators: %s: countdown timer html */
-							esc_html__( '🔥 Your cart will expire in %s minutes! Please checkout now before your items sell out!', 'ovinx' ),
-							'<span class="js-countdown time-count cd-has-zero cd-no" data-timer="' . esc_attr($expiration_time) . '" data-labels=":,:,:,"></span>'
-						);
-					?>
-					</div>
-				</div>
-			</div>
-		<?php endif; ?>
-	<?php endif; ?>
 	<div class="container container-hd">
 		<div class="row row-hd row-cart">
 			<div class="tf-cart-left col-lg-8">
 
+				<?php if ( isset( WC()->session ) && WC()->session->has_session() ): ?>
+					<?php
+
+						$session_array = (array) WC()->session;
+
+						$expiration = $session_array["\0*\0_session_expiration"];
+						$expiring   = $session_array["\0*\0_session_expiring"];
+
+						$expiration_time = $expiration - time();
+						
+					?>
+
+					<?php if( $expiration_time > 0 && $expiration_time < 7200000 ) : ?>
+						<div class="tf-cart-sold">
+							<div class="notification-sold">
+								<div class="count-text text-caption-01 cl-text-main">
+								<?php
+									printf(
+										/* translators: %s: countdown timer html */
+										esc_html__( '🔥 Your cart will expire in %s minutes! Please checkout now before your items sell out!', 'ovinx' ),
+										'<span class="js-countdown time-count cd-has-zero cd-no" data-timer="' . esc_attr($expiration_time) . '" data-labels=":,:,:,"></span>'
+									);
+								?>
+								</div>
+							</div>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+
 				<div class="tf-page-cart-main">
 					<form class="woocommerce-cart-form form-cart form-shop-cart" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
-						<div class="woocommerce-cart-form__contents overflow-auto">
+						<div class="woocommerce-cart-form__contents">
 
 							<?php do_action( 'woocommerce_before_cart_table' ); ?>
 

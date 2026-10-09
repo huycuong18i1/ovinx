@@ -32,6 +32,8 @@ if (isset($_GET['column'])){
 $product_style = isset($_GET['product_style']) ? $_GET['product_style'] : themesflat_get_opt('product_style');
 $number_view_active = isset($_GET['number_view_active']) ? sanitize_text_field($_GET['number_view_active']) : themesflat_get_opt('number_view_active');
 
+$number_view_active = ovinx_shop_sidebar_column_limit( $number_view_active );
+
 if( $number_view_active == 1){
 	$product_style = 'style-list';
 }

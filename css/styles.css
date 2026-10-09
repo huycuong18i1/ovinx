@@ -5230,7 +5230,9 @@ body:not(.header_sticky) header {
   font-weight: 500;
 }
 .tf-pagination .pag-item:hover {
-  border-color: var(--main);
+  border-color: var(--bg);
+  background: var(--bg);
+  color: #fff;
 }
 .tf-pagination .pag-item.active {
   background: var(--text-primary);
@@ -8624,7 +8626,32 @@ select.select-3:focus {
 .tf-select:hover select {
   border-color: var(--text);
 }
-
+.form-row.tf-field.validate-required.form-row-wide.address-field,
+.form-row.tf-field.validate-required.validate-email,
+.form-row.tf-field.validate-phone.form-row-wide {
+      grid-column: 1 / -1;
+}
+.form-content.woocommerce-billing-fields__field-wrapper .tf-select::after {
+  display: none;
+}
+.form-content.woocommerce-billing-fields__field-wrapper .select2.select2-container::before {
+    font-family: "icomoon";
+    position: absolute;
+    content: "\e917";
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    z-index: 1;
+    font-weight: 400;
+    pointer-events: none;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
 .password-wrapper {
   position: relative;
 }
@@ -12730,17 +12757,15 @@ select.hide-select {
 }
 
 .single-content_body .tf-social-icon .social-item {
-  width: 32px;
-  height: 32px;
   background: transparent;
   color: var(--bg);
-  border: 1px solid #E4E4E4;
+  font-size: 20px;
+  border: none;
+  text-decoration: unset;
 }
 
 .single-content_body .tf-social-icon .social-item:hover {
-  background: var(--bg);
-  color: #fff;
-  border-color: var(--bg);
+  color: var(--primary);
 }
 
 .comment-respond .checkbox-wrap {
@@ -14373,16 +14398,6 @@ line-height: 26px;
   background: #686868;
 }
 
-.stagger-wrap .stagger-item {
-  transition: 0.3s ease-in-out;
-  transform: scale(0.5) rotate(90deg) skew(15deg);
-  opacity: 0;
-}
-.stagger-wrap .stagger-item.stagger-finished {
-  transform: scale(1) rotate(0deg) skew(0deg);
-  opacity: 1;
-}
-
 .card-product {
   display: flex;
   flex-direction: column;
@@ -15100,9 +15115,6 @@ font-size: 12px;
   }
 }
 @media (max-width: 1199px) {
-  .product-thumbs-slider {
-    display: unset;
-  }
   .product-thumbs-slider > *:not(:last-child) {
     margin-bottom: 8px;
   }
@@ -18574,7 +18586,7 @@ line-height: 26px;
   line-height: 28px;
 }
 .cl-text-2 {
-  color: var(--text-mute) !important;
+  color: var(--secondary) !important;
 }
 
 .thank-wrap {
@@ -19668,6 +19680,10 @@ form.cart:has(.single_add_to_cart_button.wc-variation-is-unavailable) :is(.singl
   object-fit: cover;
 }
 
+.tf-product-info-variant .variant-picker-item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
 /* RES-003: product page touch targets on phones (hit area only, the boxes keep their look). */
 @media (max-width: 991px) {
   .btn-quantity::after {
@@ -19689,6 +19705,9 @@ form.cart:has(.single_add_to_cart_button.wc-variation-is-unavailable) :is(.singl
 @media (max-width: 768px) {
   .form-buyX-getY .item-product .variant-product select {
     font-size: 16px;
+  }
+  .tf-single-product .tf-product-info-wrap {
+      padding-left: 0;
   }
 }
 
@@ -19719,7 +19738,7 @@ form.cart:has(.single_add_to_cart_button.wc-variation-is-unavailable) :is(.singl
 /* Product gallery layouts "Grid", "Grid Style 2" and "Stacked" (?gallery_layout=grid | grid_style_2 | stacked, or Customizer >
    Single Product > Gallery > Layout). Ported from amerce's single-product SCSS (.tf-product-swiper-mobile .flat-single-grid).
    product-image.php already prints the markup/classes; the CSS was missing, so the images just stacked at their natural size.
-   (single-product.js keeps these layouts as a static CSS grid on every breakpoint — it never turns them into a Swiper.) */
+   (From 768px up they are this CSS grid; below 768px single-product.js turns them into a Swiper + thumbnail strip, like ovinx-html/product-grid.html — the ":not(.swiper-wrapper)" selectors switch the grid off then.) */
 .tf-single-product .tf-main-product .tf-product-media-wrap.tf-product-swiper-mobile .flat-single-grid .tf-swiper-wrapper-mobile:not(.swiper-wrapper) {
   display: grid;
   gap: 24px;

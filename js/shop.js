@@ -1551,10 +1551,18 @@ $(".number-sale", $price).text(
       $(".tf-view-layout-switch").removeClass("active");
       $(this).addClass("active");
 
+      // Switching between List and Grid swaps the card markup via AJAX (see the delegated click handler
+      // further down). Keep the spinner up until that response is in — a fixed 500ms timer dropped it early and
+      // showed the OLD grid cards stretched into the list layout for a moment before the list cards replaced
+      // them. Column-count switches (grid <-> grid) need no re-render, so those keep the short 500ms beat.
+      const currentStyle = $("#gridLayout").attr("data-current-style");
+      const styleChanges = typeof currentStyle !== "undefined" && $(this).data("style") !== currentStyle;
+
       $(".wrapper-control-shop").addClass("loading-shop");
-      setTimeout(() => {
+      clearTimeout(window.ovinxLayoutLoadingTimer);
+      window.ovinxLayoutLoadingTimer = setTimeout(() => {
         $(".wrapper-control-shop").removeClass("loading-shop");
-      }, 500);
+      }, styleChanges ? 15000 : 500); // 15s = safety net only; the AJAX `complete` callback clears it and removes the spinner normally
 
       // The list-view icon's real markup is `data-value-layout="tf-list-layout"` — setGridLayout()
       // now handles both grid AND list (it sets isListActive/the wrapper class based on the
@@ -1930,6 +1938,7 @@ $(".number-sale", $price).text(
           if (getCount) {
             return;
           }
+          clearTimeout(window.ovinxLayoutLoadingTimer);
           $('.wrapper-control-shop').removeClass('loading-shop');
         }
       });

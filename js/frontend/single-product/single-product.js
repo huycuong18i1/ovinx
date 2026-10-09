@@ -1362,31 +1362,42 @@
             }
         };
 
-        var innerZoom = function () {
+        // Inner / inner-circle zoom: same rule as externalZoom() — only from 1200px up. Below that the
+        // zoom is switched off (and removed again on resize) so a tap/scroll never opens a hover pane.
+        var toggleDriftZoom = function (getOptions) {
             var driftAll = document.querySelectorAll('.tf-image-zoom');
+            var desktop = matchMedia("only screen and (min-width: 1200px)").matches;
+
             $(driftAll).each(function (i, el) {
-                var pane = $(this).closest('.tf-inner-zoom-box').get(0);
-                new Drift(
-                    el, {
-                    paneContainer: pane,
+                if (desktop) {
+                    if (!el._drift) {
+                        el._drift = new Drift(el, getOptions(el));
+                    }
+                } else if (el._drift) {
+                    el._drift.destroy();
+                    el._drift = null;
+                }
+            });
+        };
+
+        var innerZoom = function () {
+            toggleDriftZoom(function (el) {
+                return {
+                    paneContainer: $(el).closest('.tf-inner-zoom-box').get(0),
                     zoomFactor: 2,
                     inlinePane: false,
                     containInline: false,
-                }
-                );
+                };
             });
         }
 
         var magnifierZoom = function () {
-            var driftAll = document.querySelectorAll('.tf-image-zoom');
-            $(driftAll).each(function (i, el) {
-                new Drift(
-                    el, {
+            toggleDriftZoom(function () {
+                return {
                     zoomFactor: 2,
                     inlinePane: true,
                     containInline: false,
-                }
-                );
+                };
             });
         }
 
@@ -1405,14 +1416,9 @@
 
         var thumbSwiper = function () {
 
-            // Grid gallery layout (.flat-single-grid) is a static CSS grid on every
-            // breakpoint. It must never be turned into a Swiper: the "thumbs-bottom"
-            // SCSS rule sets width:auto !important on .tf-product-media-thumbs, so with
-            // observer/observeParents enabled Swiper keeps recomputing slide width from
-            // its own auto-grown container width, growing without bound on mobile.
-            if ($(".flat-single-grid").length) {
-                return;
-            }
+            // Grid gallery layouts (.flat-single-grid) are a CSS grid from 768px up and a
+            // Swiper + thumbnail strip below that (same as ovinx-html/product-grid.html).
+            // The Swiper is created/destroyed by updateSwiperState() further down.
 
             // if ($(".thumbs-slider").length == 0) {
             //     return;
@@ -1550,7 +1556,7 @@
                 let main = null;
 
                 var updateSwiperState = function () {
-                    const isMobile = window.innerWidth < 992;
+                    const isMobile = window.innerWidth < ($(".flat-single-grid").length ? 768 : 992);
                     if (isMobile) {
                         if (main) return;
                         thumbs = new Swiper(".tf-product-media-thumbs", thumbsConfigs);
@@ -1892,10 +1898,12 @@ var lightbox = function () {
             }
 
             if (tfWooParams?.zoom == 'inner') {
+                window.addEventListener('resize', innerZoom);
                 innerZoom();
             }
 
             if (tfWooParams?.zoom == 'inner_circle') {
+                window.addEventListener('resize', magnifierZoom);
                 magnifierZoom();
             }
 

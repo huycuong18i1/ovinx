@@ -37,7 +37,7 @@ function tfwc_add_to_cart_fragment( $data ) {
             
     // Class list must cover BOTH contexts this selector matches: desktop header
     // (.nav-icon-list .nav-icon-item.has-number .number-order) and mobile bottom
-    // toolbar (.tf-toolbar-bottom .toolbar-count) — see CLAUDE.md fragment-overwrite note.
+    // toolbar (.tf-toolbar-bottom .toolbar-count) — the AJAX fragment overwrites the template badge, so both must match.
     $data['.nav-cart a.nav-icon-item .shopping-cart-items-count'] = '<span class="number-order toolbar-count shopping-cart-items-count">'. esc_html( $item_count ).'</span>';
 
     // QA P5-01: header "Cart Total" (tpl/header/header-cart.php) had no fragment, so it kept the old

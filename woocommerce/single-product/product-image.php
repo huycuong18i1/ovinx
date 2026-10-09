@@ -61,6 +61,7 @@ $preview_thumbs = 6;
 switch( $gallery_layout ){
 	case 'grid':
 		$wrapper_classes[] = 'tf-product-media-wrap';
+		$wrapper_classes[] = 'product-thumbs-slider';
 		$wrapper_classes[] = 'tf-product-swiper-mobile';
 		$wrapper_classes[] = 'thumbs-bottom';
 		$gallery_classes .= ' flat-single-grid';
@@ -68,6 +69,7 @@ switch( $gallery_layout ){
 		break;
 	case 'grid_style_2':
 		$wrapper_classes[] = 'tf-product-media-wrap';
+		$wrapper_classes[] = 'product-thumbs-slider';
 		$wrapper_classes[] = 'tf-product-swiper-mobile';
 		$wrapper_classes[] = 'thumbs-bottom';
 		$gallery_classes .= ' flat-single-grid grid-style-2';
@@ -75,6 +77,7 @@ switch( $gallery_layout ){
 		break;
 	case 'stacked':
 		$wrapper_classes[] = 'tf-product-media-wrap';
+		$wrapper_classes[] = 'product-thumbs-slider';
 		$wrapper_classes[] = 'tf-product-swiper-mobile';
 		$wrapper_classes[] = 'thumbs-bottom';
 		$gallery_classes .= ' flat-single-grid stacked-style';

@@ -105,9 +105,16 @@ $wp_customize->add_setting (
 $wp_customize->add_control(
     'number_view_active',
     array(
-        'type'      => 'text',
-        'label'     => esc_html__('Number Active View', 'ovinx'),
+        'type'      => 'select',
+        'label'     => esc_html__('Default Product View', 'ovinx'),
         'section'   => 'section_shop_catalog',
+        'description'   => esc_html__('View the shop opens with. Shop layouts with a filter sidebar show at most 3 columns. A visitor can also open /shop/?style_product=list (or =grid).', 'ovinx'),
+        'choices'   => array(
+            '1' => esc_html__( 'List', 'ovinx' ),
+            '2' => esc_html__( 'Grid - 2 columns', 'ovinx' ),
+            '3' => esc_html__( 'Grid - 3 columns', 'ovinx' ),
+            '4' => esc_html__( 'Grid - 4 columns', 'ovinx' ),
+        ),
         'active_callback' => function() use ( $wp_customize ) {
             return ( 
                 check_setting_is_on( 'catalog_view' )

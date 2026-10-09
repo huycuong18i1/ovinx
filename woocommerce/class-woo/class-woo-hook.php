@@ -664,8 +664,8 @@ $trans_text = [
 
 					/**
 					 * This is the AJAX-pagination twin of woocommerce/loop/pagination.php's 'number'
-					 * branch (rendered a second, independent time here — same pattern documented in
-					 * CLAUDE.md for the wishlist/cart header badges) — must get the same `.tf-pagination`
+					 * branch (rendered a second, independent time here — same pattern as
+					 * the wishlist/cart header badges) — must get the same `.tf-pagination`
 					 * / `.pag-item(.active)` classes + `icon-CaretLeft`/`icon-CaretRight` icon fix, or the
 					 * AJAX-loaded pages fall back to unstyled default `page-numbers` markup.
 					 */

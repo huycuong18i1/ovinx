@@ -11,7 +11,10 @@ if ( ! class_exists( 'WooCommerce' ) ) {
 	return;
 }
 
-get_header(); ?>
+get_header();
+
+wc_get_template( 'tpl/shop-control/control-filter.php' );
+?>
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -21,7 +24,7 @@ get_header(); ?>
 					<?php
 					$layout =themesflat_get_opt( 'shop_layout' );
 					if (isset($_GET['sidebar'])){
-						$layout = $_GET['sidebar'];
+						$layout = sanitize_text_field( wp_unslash( $_GET['sidebar'] ) );
 					}
 
 					$shop_products_per_page = 8;
@@ -51,114 +54,14 @@ get_header(); ?>
 								<div class="meta-wrap clearfix">
 									<?php do_action( 'woocommerce_before_shop_loop' ); ?>
 									<?php if(themesflat_get_opt('catalog_toolbar') == 1) {
-										$catalog_btn_change = isset($_GET['catalog_btn_change']) ? (int) $_GET['catalog_btn_change'] : themesflat_get_opt('catalog_btn_change');
-										?>
-										<div class="tf-shop-control">
-											
-												<div class="tf-group-filter">
-													<?php if($catalog_btn_change == 1) {?>
-														<a href="#filterShop" data-bs-toggle="offcanvas" aria-controls="filterShop" class="tf-btn-filter">
-															<span class="icon icon-filter"></span><span class="text"><?php echo esc_html__('Filter','ovinx');?></span>
-														</a>
-
-														<div class="offcanvas offcanvas-start canvas-sidebar canvas-filter" id="filterShop" aria-modal="true" role="dialog" style="z-index: 100000;">
-															<div class="canvas-wrapper">
-																<div class="canvas-header">
-																	<span class="title"><?php echo esc_html__('Filter','ovinx')?></span>
-																	<div class="icon-close icon-close-popup" data-bs-dismiss="offcanvas" aria-label="Close"></div>
-																</div>
-																<div class="canvas-body">
-																	<?php dynamic_sidebar('shop-sidebar');?>
-																</div>
-															</div>
-														</div>
-													<?php } ?>
-
-													<?php if($layout == 'sidebar-left' || $layout == 'sidebar-right') {?>
-														<a href="#filterShop"  class="tf-btn-filter d-flex d-xl-none">
-															<span class="icon icon-filter"></span><span class="text"><?php echo esc_html__('Filter','ovinx');?></span>
-														</a>
-													<?php } ?>
-
-													<?php if(themesflat_get_opt('catalog_sort_by') == 1) { ?>
-														<div class="tf-dropdown-sort" data-bs-toggle="dropdown">
-															<div class="btn-select">
-																<span class="text-sort-value"><?php echo esc_html__('Alphabetically, A-Z','ovinx');?></span>
-																<span class="icon icon-arr-down"></span>
-															</div>
-															<div class="dropdown-menu">
-																<div class="select-item " data-sort-value="best-selling">
-																<span class="text-value-item"><?php echo esc_html__('Best selling','ovinx');?></span>
-																</div>
-																<div class="select-item active" data-sort-value="a-z">
-																<span class="text-value-item"><?php echo esc_html__('Alphabetically, A-Z','ovinx');?></span>
-																</div>
-																<div class="select-item" data-sort-value="z-a">
-																<span class="text-value-item"><?php echo esc_html__('Alphabetically, Z-A','ovinx');?></span>
-																</div>
-																<div class="select-item" data-sort-value="price-low-high">
-																<span class="text-value-item"><?php echo esc_html__('Price, low to high','ovinx');?></span>
-																</div>
-																<div class="select-item" data-sort-value="price-high-low">
-																<span class="text-value-item"><?php echo esc_html__('Price, high to low','ovinx');?></span>
-																</div>
-															</div>
-														</div>
-														
-													<?php } ?>
-												</div>
-											
-											<?php if(themesflat_get_opt('catalog_view') == 1) {?>
-												<?php
-
-												$number_view = isset($_GET['number_view']) && is_numeric($_GET['number_view']) ? (int) $_GET['number_view'] : themesflat_get_opt('number_view');
-												$number_view_active = isset($_GET['number_view_active']) && is_numeric($_GET['number_view_active']) ? (int) $_GET['number_view_active'] : themesflat_get_opt('number_view_active');
-
-												$product_style = isset($_GET['product_style']) ? $_GET['product_style'] : themesflat_get_opt('product_style');
-												if (isset($_POST['product_style'])) {
-													$product_style = $_POST['product_style'];
-												}
-												
-												if( $product_style == 'style-list') {
-													// $product_style = 'style-list';
-													$number_view_active = 1;
-												}
-												?>
-
-												<ul class="tf-control-layout">
-													<?php $number_view_active_class = ($number_view_active == 1) ? ' active' : ''; ?>
-													<li class="tf-view-layout-switch sw-layout-1 style-list <?php echo esc_attr($number_view_active_class); ?>" data-value-layout="tf-col-1" data-style="style-list">
-														<div class="item icon-list">
-															<span></span>
-															<span></span>
-														</div>
-													</li>
-													<?php
-													for ($i = 2; $i <= $number_view; $i++) {
-														$layout_class = 'sw-layout-' . $i;
-														$icon_class = 'icon-grid-' . $i;
-														$active_class = ($i == $number_view_active) ? 'active' : ''; 
-													?>
-														<li class="tf-view-layout-switch <?php echo esc_attr($layout_class); ?> <?php echo esc_attr($active_class); ?>" data-value-layout="tf-col-<?php echo esc_attr($i); ?>" data-style="<?php echo esc_attr($product_style); ?>">
-															<div class="item <?php echo esc_attr($icon_class); ?>">
-																<?php 
-																for ($j = 1; $j <= $i; $j++) {
-																	echo '<span></span>';
-																}
-																?>
-															</div>
-														</li>
-													<?php } ?>
-												</ul>
-
-											<?php } ?>
-										</div>
-									<?php } ?>
-								</div>
-
-								<div class="meta-filter-shop" >
-									<div id="product-count-grid" class="count-text"></div>
-									<div id="applied-filters" class="selected-filters"></div>
+										// Same toolbar as the shop page (tpl/shop-control/*). This page has no sidebar column, so the
+										// sidebar layouts use the full-width bar ("Show Filters" button + off-canvas filters, sort, layout switch).
+										if ( 'filter-top' === $layout ) {
+											wc_get_template( 'tpl/shop-control/control-top.php' );
+										} else {
+											wc_get_template( 'tpl/shop-control/control.php' );
+										}
+									} ?>
 								</div>
 								<?php woocommerce_product_loop_start();								
 
