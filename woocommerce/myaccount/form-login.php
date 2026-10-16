@@ -68,7 +68,6 @@ $social = function ( $label ) use ( $show_fb, $show_gg, $login_facebook_url, $lo
 
 $redirect = wc_get_page_permalink( 'myaccount' );
 ?>
-<div class="container">
 	<div class="account-auth" data-account-auth>
 
 		<?php // ---------------------------------------------------------------- Sign In ?>
@@ -182,5 +181,4 @@ $redirect = wc_get_page_permalink( 'myaccount' );
 		</div>
 
 	</div>
-</div>
 <?php do_action( 'woocommerce_after_customer_login_form' ); ?>

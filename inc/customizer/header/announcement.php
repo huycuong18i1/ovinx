@@ -1,4 +1,15 @@
 <?php
+// Content controls (style / slides / marquee) are shared by desktop and mobile, so show them when EITHER
+// "Enable Promo Bar" (this section) or "Show Promo Bar Mobile" (Mobile > Announcement Bar) is on.
+if ( ! function_exists( 'ovinx_promo_bar_enabled_anywhere' ) ) {
+function ovinx_promo_bar_enabled_anywhere( $control ) {
+    $desktop = $control->manager->get_setting( 'show_promo_bar' );
+    $mobile  = $control->manager->get_setting( 'show_promo_bar_mobile' );
+
+    return ( $desktop && $desktop->value() == 1 ) || ( $mobile && $mobile->value() == 1 );
+}
+}
+
 $wp_customize->add_setting( 
     'show_promo_bar',
     array(
@@ -36,7 +47,7 @@ $wp_customize->add_control(
             'style-text'   => esc_html__('Marquee Text', 'ovinx'),
         ),
         'active_callback' => function( $control ) {
-            return $control->manager->get_setting( 'show_promo_bar' )->value() == 1;
+            return ovinx_promo_bar_enabled_anywhere( $control );
         },
     )
 );
@@ -53,12 +64,8 @@ $wp_customize->add_control(new Themesflat_Repeater_Controls($wp_customize, 'prom
     'priority'        => 4,
     'active_callback' => function( $control ) {
 
-        $show_promo_bar = $control->manager
-            ->get_setting( 'show_promo_bar' )
-            ->value();
-
         return (
-            $show_promo_bar == 1 && $control->manager->get_setting( 'promo_topbar_style' )->value() == 'style-slides'
+            ovinx_promo_bar_enabled_anywhere( $control ) && $control->manager->get_setting( 'promo_topbar_style' )->value() == 'style-slides'
         );
     },
 )));
@@ -75,12 +82,8 @@ $wp_customize->add_control(new Themesflat_Repeater_Controls($wp_customize, 'prom
     'priority'        => 5,
     'active_callback' => function( $control ) {
 
-        $show_promo_bar = $control->manager
-            ->get_setting( 'show_promo_bar' )
-            ->value();
-
         return (
-            $show_promo_bar == 1 && $control->manager->get_setting( 'promo_topbar_style' )->value() == 'style-text'
+            ovinx_promo_bar_enabled_anywhere( $control ) && $control->manager->get_setting( 'promo_topbar_style' )->value() == 'style-text'
         );
     },
 )));

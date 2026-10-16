@@ -19,9 +19,6 @@
                 </div>
             </div>
 
-            <div class="canvas-footer">
-                <div class="overlay-close" data-bs-dismiss="offcanvas"></div>
-            </div>
         </div>
     </div>
 <?php } ?>

@@ -1,9 +1,18 @@
 <?php 
 
-$show_promo_bar = themesflat_get_opt('show_promo_bar');
+// Desktop ("Enable Promo Bar") and mobile ("Show Promo Bar Mobile") are independent switches: the bar is
+// rendered when either is on, and the other breakpoint is hidden with CSS (inc/styles.php hides it on
+// mobile when the mobile switch is off; `.promo-mobile-only` in styles.css hides it on desktop).
+$show_promo_bar        = themesflat_get_opt('show_promo_bar');
+$show_promo_bar_mobile = themesflat_get_opt('show_promo_bar_mobile');
 if (themesflat_get_opt_elementor('show_promo_bar') != '') {
+    // Per-page Elementor override turns the bar on/off for both breakpoints.
     $show_promo_bar = themesflat_get_opt_elementor('show_promo_bar');
+    if ($show_promo_bar != 1) {
+        $show_promo_bar_mobile = 0;
+    }
 }
+$promo_mobile_only_class = ( $show_promo_bar != 1 && $show_promo_bar_mobile == 1 ) ? ' promo-mobile-only' : '';
 
 $promo_topbar_style = themesflat_get_opt('promo_topbar_style');
 
@@ -14,21 +23,21 @@ $promo_slides_arr = themesflat_get_opt('promo_slides_arr');
 $promo_slides_json = json_decode($promo_slides_arr, true);
 
 ?>
-<?php if ( $show_promo_bar == 1 ) { ?>
+<?php if ( $show_promo_bar == 1 || $show_promo_bar_mobile == 1 ) { ?>
 
         <?php if ( $promo_topbar_style == 'style-slides' ) : ?>
 
-            <div class="tf-topbar topbar-v2 bg-primary-2 sm-d-none tf-btn-swiper-main tf-slider-promo <?php echo esc_attr( themesflat_get_opt_elementor('extra_classes_header') ); ?>">
+            <div class="tf-topbar topbar-v2 bg-primary-2 tf-btn-swiper-main tf-slider-promo<?php echo esc_attr( $promo_mobile_only_class ); ?> <?php echo esc_attr( themesflat_get_opt_elementor('extra_classes_header') ); ?>">
                 <div class="container">
                     <div class="row align-items-center">
-                        <div class="col-lg-3 d-none d-xl-block">
+                        <div class="col-lg-3 col-2">
                             <div class="d-flex justify-content-end">
                                 <div class="nav-prev-swiper text-white link d-flex">
                                     <i class="icon icon-CaretLeftV2 fs-20"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-6">
+                        <div class="col-xl-6 col-8">
                             <div dir="ltr" class="swiper tf-swiper swiper-topbar default" data-touch="false" data-auto="true" data-loop="true" data-speed="1500">
                                 <div class="swiper-wrapper">
                                     <?php if ( ! empty( $promo_slides_json ) ) : foreach ( $promo_slides_json as $value ) : ?>
@@ -41,7 +50,7 @@ $promo_slides_json = json_decode($promo_slides_arr, true);
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 d-none d-xl-block">
+                        <div class="col-lg-3 col-2">
                             <div class="d-flex nav-next-swiper text-white link">
                                 <i class="icon icon-CaretRightV2 fs-20"></i>
                             </div>
@@ -53,7 +62,7 @@ $promo_slides_json = json_decode($promo_slides_arr, true);
 
         <?php else: ?>
 
-            <div class="tf-promo-bar style-text <?php echo esc_attr( themesflat_get_opt_elementor('extra_classes_header') ); ?>">
+            <div class="tf-promo-bar style-text<?php echo esc_attr( $promo_mobile_only_class ); ?> <?php echo esc_attr( themesflat_get_opt_elementor('extra_classes_header') ); ?>">
                 <div class="infiniteSlide-text-v03">
                     <div class="infiniteSlide infiniteSlide-wrapper" data-clone="5">
                         <?php if ( ! empty( $promo_marquee_json ) ) : ?>

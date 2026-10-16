@@ -714,7 +714,7 @@ $trans_text = [
 							' . esc_html($showing_text)  
 							.'<span class="pagi-info-line"> </span>
 						</span>
-						<button id="load-more-btn" class="tf-btn btn-outline-dark2 tf-loading-2 loadmore" data-page="' . ($page + 1) . '">
+						<button id="load-more-btn" class="btn-loadmore tf-btn tf-loading loadmore" data-page="' . ($page + 1) . '">
 							<span class="text">' . esc_html($shop_loadmore_text) . '</span>
 							<div class="spinner-circle">
 								<span class="spinner-circle1 spinner-child"></span>
@@ -729,11 +729,8 @@ $trans_text = [
 							</div>
 						</button>';
 					}else{
-						$pagination .= '
-						<span class="showing-total-info" style="--pagi-info-line-width:' . esc_attr($width_line). '%;">
-							' . esc_html($showing_text)  
-							.'<span class="pagi-info-line"> </span>
-						</span>';
+						// Last page reached: nothing left to load, so drop the "Showing X of X" footer too.
+						$pagination = '';
 					}
 				} else if ($shop_pagination == 'autoload') {
 					$pagination = '';
@@ -757,11 +754,8 @@ $trans_text = [
 							</div>
 						</button>';
 					}else{
-						$pagination .= '
-						<span class="showing-total-info" style="--pagi-info-line-width:' . esc_attr($width_line). '%;">
-							' . esc_html($showing_text)  
-							.'<span class="pagi-info-line"> </span>
-						</span>';	
+						// Last page reached: nothing left to load, so drop the "Showing X of X" footer too.
+						$pagination = '';
 					}
 				}
 				

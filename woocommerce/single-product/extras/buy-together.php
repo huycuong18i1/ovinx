@@ -264,98 +264,102 @@ if( $style == 'grid') : ?>
                                 <a href="<?php echo esc_url($together_url); ?>" class="img-prd">
                                     <img loading="lazy" width="100" height="133" src="<?php echo esc_url($main_image); ?>" alt="<?php echo esc_attr($product_together->get_name()); ?>">
                                 </a>
-                                <div class="infor-prd">
-                                    <a href="<?php echo esc_url($together_url); ?>" class="prd_name cl-text-main link-underline fw-medium lh-24 text-line-clamp-2">
-                                        <?php echo esc_html($product_together->get_name()); ?>
-                                    </a>
-                                    <?php if ($product_together->is_type('variable')): ?>
-                                        <?php
-                                            $default_attrs = $product_together->get_default_attributes();
-                                            $normalized_default_attrs = [];
-                                            foreach ( $default_attrs as $key => $val ) {
-                                                $normalized_default_attrs[ 'attribute_' . $key ] = $val;
-                                            }
-                                            $variations = $product_together->get_available_variations();
-                                            $all_attrs = $product_together->get_variation_attributes();
-                                        ?>
-                                        <?php if(count( $all_attrs ) < 6 ) : ?>
-                                            <div class="bundle-variant tf-select">
-                                                <select aria-label="<?php esc_attr_e( 'Select variation', 'ovinx' ); ?>">
+                                <div class="content-right">
+                                    <div class="infor-prd">
+                                            <div class="inner-group">
+                                            <a href="<?php echo esc_url($together_url); ?>" class="prd_name cl-text-main link-underline fw-medium lh-24 text-line-clamp-2">
+                                                <?php echo esc_html($product_together->get_name()); ?>
+                                            </a>
+                                            <?php if ($product_together->is_type('variable')): ?>
                                                 <?php
-                                                    foreach ( $variations as $variation ) {
-                                                        $variation_obj = wc_get_product( $variation['variation_id'] );
-                                                        if ( ! $variation_obj || ! $variation_obj->exists() ) continue;
-                                                        if (!$variation_obj->is_purchasable() || !$variation_obj->is_in_stock()) {
-                                                            continue;
-                                                        }
-                                                    
-                                                        $price = $variation_obj->get_price();
-                                                        $image_url = wp_get_attachment_image_url( $variation_obj->get_image_id(), 'full' );
-                                                        $price_html = $variation_obj->get_price_html();
-                                                    
-                                                        $attribute_sets = [[]];
-
-                                                        foreach ( $variation['attributes'] as $attr => $value ) {
-                                                            $taxonomy = str_replace( 'attribute_', '', $attr );
-                                                    
-                                                            if ( empty( $value ) ) {
-                                                                $options_string = $product_together->get_attribute( $taxonomy );
-                                                                $options = array_map( 'trim', preg_split( '/[,|]/', $options_string ) );
-                                                    
-                                                                $new_sets = [];
-                                                                foreach ( $attribute_sets as $set ) {
-                                                                    foreach ( $options as $option ) {
-                                                                        if ( ! empty( $option ) ) {
-                                                                            $option_slug = sanitize_title( $option );
-                                                                            $new_set = $set;
-                                                                            $new_set[$attr] = $option_slug;
-                                                    
-                                                                            $term = get_term_by( 'slug', $option_slug, $taxonomy );
-                                                                            $new_set['_label'][$taxonomy] = $term ? $term->name : ucfirst( $option );
-                                                    
-                                                                            $new_sets[] = $new_set;
+                                                    $default_attrs = $product_together->get_default_attributes();
+                                                    $normalized_default_attrs = [];
+                                                    foreach ( $default_attrs as $key => $val ) {
+                                                        $normalized_default_attrs[ 'attribute_' . $key ] = $val;
+                                                    }
+                                                    $variations = $product_together->get_available_variations();
+                                                    $all_attrs = $product_together->get_variation_attributes();
+                                                ?>
+                                                <?php if(count( $all_attrs ) < 6 ) : ?>
+                                                    <div class="bundle-variant tf-select">
+                                                        <select aria-label="<?php esc_attr_e( 'Select variation', 'ovinx' ); ?>">
+                                                        <?php
+                                                            foreach ( $variations as $variation ) {
+                                                                $variation_obj = wc_get_product( $variation['variation_id'] );
+                                                                if ( ! $variation_obj || ! $variation_obj->exists() ) continue;
+                                                                if (!$variation_obj->is_purchasable() || !$variation_obj->is_in_stock()) {
+                                                                    continue;
+                                                                }
+                                                            
+                                                                $price = $variation_obj->get_price();
+                                                                $image_url = wp_get_attachment_image_url( $variation_obj->get_image_id(), 'full' );
+                                                                $price_html = $variation_obj->get_price_html();
+                                                            
+                                                                $attribute_sets = [[]];
+        
+                                                                foreach ( $variation['attributes'] as $attr => $value ) {
+                                                                    $taxonomy = str_replace( 'attribute_', '', $attr );
+                                                            
+                                                                    if ( empty( $value ) ) {
+                                                                        $options_string = $product_together->get_attribute( $taxonomy );
+                                                                        $options = array_map( 'trim', preg_split( '/[,|]/', $options_string ) );
+                                                            
+                                                                        $new_sets = [];
+                                                                        foreach ( $attribute_sets as $set ) {
+                                                                            foreach ( $options as $option ) {
+                                                                                if ( ! empty( $option ) ) {
+                                                                                    $option_slug = sanitize_title( $option );
+                                                                                    $new_set = $set;
+                                                                                    $new_set[$attr] = $option_slug;
+                                                            
+                                                                                    $term = get_term_by( 'slug', $option_slug, $taxonomy );
+                                                                                    $new_set['_label'][$taxonomy] = $term ? $term->name : ucfirst( $option );
+                                                            
+                                                                                    $new_sets[] = $new_set;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        $attribute_sets = $new_sets;
+                                                                    } else {
+                                                                        foreach ( $attribute_sets as &$set ) {
+                                                                            $set[$attr] = $value;
+                                                            
+                                                                            $term = get_term_by( 'slug', $value, $taxonomy );
+                                                                            $set['_label'][$taxonomy] = $term ? $term->name : ucfirst( $value );
                                                                         }
                                                                     }
                                                                 }
-                                                                $attribute_sets = $new_sets;
-                                                            } else {
-                                                                foreach ( $attribute_sets as &$set ) {
-                                                                    $set[$attr] = $value;
-                                                    
-                                                                    $term = get_term_by( 'slug', $value, $taxonomy );
-                                                                    $set['_label'][$taxonomy] = $term ? $term->name : ucfirst( $value );
+                                                            
+                                                                foreach ( $attribute_sets as $set ) {
+                                                                    if( empty($set) ) continue;
+                                                                    $label = implode( ' / ', $set['_label'] );
+                                                            
+                                                                    $data_attributes = array_filter($set, fn($k) => strpos($k, '_label') === false, ARRAY_FILTER_USE_KEY);
+                                                            
+                                                                    echo '<option 
+                                                                        value="' . esc_attr( $variation['variation_id'] ) . '" 
+                                                                        data-image="' . esc_url( $image_url ) . '" 
+                                                                        data-attributes="' . esc_attr( json_encode( $data_attributes ) ) . '" 
+                                                                        data-price="' . esc_attr( $price ) . '" 
+                                                                        data-price-html="' . esc_attr( $price_html ) . '" 
+                                                                        ' . selected( empty(array_diff_assoc($variation['attributes'], $normalized_default_attrs)), true, false ) . '>'
+                                                                        . $label . 
+                                                                        '</option>';
                                                                 }
-                                                            }
-                                                        }
-                                                    
-                                                        foreach ( $attribute_sets as $set ) {
-                                                            if( empty($set) ) continue;
-                                                            $label = implode( ' / ', $set['_label'] );
-                                                    
-                                                            $data_attributes = array_filter($set, fn($k) => strpos($k, '_label') === false, ARRAY_FILTER_USE_KEY);
-                                                    
-                                                            echo '<option 
-                                                                value="' . esc_attr( $variation['variation_id'] ) . '" 
-                                                                data-image="' . esc_url( $image_url ) . '" 
-                                                                data-attributes="' . esc_attr( json_encode( $data_attributes ) ) . '" 
-                                                                data-price="' . esc_attr( $price ) . '" 
-                                                                data-price-html="' . esc_attr( $price_html ) . '" 
-                                                                ' . selected( empty(array_diff_assoc($variation['attributes'], $normalized_default_attrs)), true, false ) . '>'
-                                                                . $label . 
-                                                                '</option>';
-                                                        }
-                                                    }                                    
-                                                ?>
-                                                </select>
+                                                            }                                    
+                                                        ?>
+                                                        </select>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <?php woocommerce_template_loop_add_to_cart(); ?>
+                                                    <input type="hidden" class="fbt_variation_id" value="" data-atrributes="" />
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                             </div>
-                                        <?php else: ?>
-                                            <?php woocommerce_template_loop_add_to_cart(); ?>
-                                            <input type="hidden" class="fbt_variation_id" value="" data-atrributes="" />
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="quantity-price lh-24 fw-medium cl-text-main">
-                                    <span class="tf-price price" data-price="<?php echo esc_attr( $product_together->is_type('variable') ? '0' : $product_together->get_price() ); ?>"><?php echo wp_kses_post($product_together->get_price_html()); ?></span>
+                                    </div>
+                                    <div class="quantity-price lh-24 fw-medium cl-text-main">
+                                        <span class="tf-price price" data-price="<?php echo esc_attr( $product_together->is_type('variable') ? '0' : $product_together->get_price() ); ?>"><?php echo wp_kses_post($product_together->get_price_html()); ?></span>
+                                    </div>
                                 </div>
                             </li>
                             <?php

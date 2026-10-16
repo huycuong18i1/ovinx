@@ -18,6 +18,7 @@
   --black: #000000;
   --primary: #d90d51; /* was #ea0f5b: white-on-primary was 4.45:1 (< 4.5 WCAG AA); this is 5.09:1 */
   --main: #1a1a1a;
+  --secondary: #717171;
   --text-primary: #1d358f;
   --text-secondary: #6b6b6b; /* was #717171: 4.42:1 on --surface (#f1f4f8) — fails AA; #6b6b6b is 4.83:1 (5.3:1 on white) */
   --text-mute: #aab0bb;
@@ -369,9 +370,6 @@ body {
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-body::-webkit-scrollbar {
-  width: 0px;
 }
 body::-webkit-scrollbar-thumb {
   cursor: grab;
@@ -5228,6 +5226,7 @@ body:not(.header_sticky) header {
   text-align: center;
   font-style: 16px;
   font-weight: 500;
+  color: var(--bg);
 }
 .tf-pagination .pag-item:hover {
   border-color: var(--bg);
@@ -5305,11 +5304,11 @@ body:not(.header_sticky) header {
   background: var(--surface);
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--secondary);
+  color: var(--secondary) !important;
 }
 .sb-tag a:hover {
   background: var(--text-primary);
-  color: var(--white);
+  color: var(--white) !important;
 }
 
 .sb-policy {
@@ -5477,6 +5476,9 @@ body:not(.header_sticky) header {
   display: grid;
   gap: 40px;
   margin-bottom: 60px;
+}
+.single-content_body p {
+  color: var(--secondary);
 }
 .single-content_body .entry-image {
   border-radius: 12px;
@@ -7655,6 +7657,56 @@ text-transform: capitalize;
 .tf-mini-cart-tool-openable .notice-order-note,
 .tf-mini-cart-tool-openable .notice-shipping {
   margin-bottom: 12px;
+}
+
+/* Mini-cart "Shipping" popup (tpl/popup/minicart-shipping.php): the form is WooCommerce's own
+   woocommerce_shipping_calculator() markup, which ground truth (ovinx-html) never has — so this
+   follows the reference theme amerce's approach (always-open field stack; the "Calculate shipping"
+   toggle and WC's own "Update" button are hidden because the popup's own "Estimate" button does
+   the AJAX save) with ovinx's tokens/field look (square, 1px var(--line), var(--text-primary)). */
+.tf-mini-cart-tool-openable.estimate-shipping .tf-mini-cart-tool-content {
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .shipping-calculator-button,
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .shipping-calculator-form button[name=calc_shipping] {
+  display: none !important;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .shipping-calculator-form {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .form-row {
+  margin: 0;
+  padding: 0;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .form-row > span {
+  display: block;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .form-row label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator select,
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .input-text {
+  width: 100%;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+/* Base `select` is reset to appearance:none (no native arrow), so give these a chevron. */
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator select {
+  padding-right: 40px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 256 256' fill='%231d358f'%3E%3Cpath d='M213.66 101.66l-80 80a8 8 0 0 1-11.32 0l-80-80a8 8 0 0 1 11.32-11.32L128 164.69l74.34-74.35a8 8 0 0 1 11.32 11.32Z'/%3E%3C/svg%3E") no-repeat right 15px center / 16px 16px;
+}
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator select:hover,
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator select:focus,
+.tf-mini-cart-tool-openable .woocommerce-shipping-calculator .input-text:focus {
+  border-color: var(--text-primary);
 }
 
 .tfwc-minicart-totals .tf-cart-total-text {
@@ -9920,6 +9972,7 @@ color: #AAB0BB;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 2;
 }
 .slideshow-v01 .sld__tag {
   margin-bottom: 8px;
@@ -9958,6 +10011,110 @@ color: #AAB0BB;
     padding-left: 38px;
     padding-right: 38px;
   }
+}
+
+/* Promo bar enabled for mobile only ("Show Promo Bar Mobile" on, "Enable Promo Bar" off) */
+@media (min-width: 768px) {
+  .promo-mobile-only {
+    display: none !important;
+  }
+}
+
+/* Mobile text-contrast gradient for white-text slideshow slides + collection banners */
+@media (max-width: 767.98px) {
+  .slideshow-v01.has-text-overlay .sld-image,
+  .section-banner-slideshow .tf-slideshow .sld-image,
+  .banner-v01.hover-img .bn-image,
+  .slideshow-v01.style-2.px-s2-v2 .sld-image {
+    position: relative;
+  }
+   .overlay-black .banner-v01.hover-img .bn-image::after,
+  .slideshow-v01.has-text-overlay .sld-image::after,
+  .collection-v01.has-text-overlay .cls-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.25) 100%);
+    z-index: 1;
+  }
+  /* Collection Banner: per-item "Mobile Overlay: Light" option (item gets .cb-overlay-light; Dark is the default above) */
+  .collection-v01.has-text-overlay.cb-overlay-light .cls-image::after {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.6) 60%, rgba(255, 255, 255, 0.3) 100%);
+  }
+  /* Grid Banner: text sits at the bottom of the image, so the gradient runs bottom-up */
+  .collection-v04.has-text-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 55%, rgba(0, 0, 0, 0.1) 100%);
+    z-index: 1;
+  }
+    .section-banner-slideshow .tf-slideshow .sld-image::after,
+    .banner-v01.hover-img .bn-image::after,
+    .slideshow-v01.style-2.px-s2-v2 .sld-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgb(252 251 251) 0%, rgb(250 249 249 / 69%) 60%, rgb(255 255 255 / 0%) 100%);
+        z-index: 1;
+  }
+
+  .section-banner-slideshow .tf-slideshow .sld__desc,
+  .slideshow-v01.style-2.px-s2-v2 .sld__desc {
+    display: none;
+  }
+
+  .collection-v04 .cls-content,
+  .slideshow-v01.style-2.px-s2-v2 .cls-content {
+    z-index: 2;
+  }
+
+  .section-banner-slideshow .tf-slideshow .sld__title,
+  .slideshow-v01.style-2.px-s2-v2 .sld__title {
+    margin-bottom: 20px;
+}
+
+.banner-v01 .bn-content {
+    z-index: 2;
+}
+
+.sc-slider .row.flex-wrap-reverse.gy-30 > * {
+  margin-top: 0 !important;
+  gap: 30px;
+}
+
+.card-product_wrapper .product-countdown {
+    bottom: 20px;
+}
+
+.section-product-tab .sect-heading .h4,
+.section-product-tab .sect-heading .tf-list {
+  width: 50%;
+    order: -1;
+}
+
+.section-product-tab .sect-heading .tf-list {
+  justify-content: right;
+}
+
+.section-product-tab .sect-heading {
+        gap: 12px 0px !important;
+}
+
+.section-product-tab .sect-heading .list-tab-btn-v2 {
+  width: 100%;
+}
+
+}
+
+.collection-v01.has-text-overlay .cls_tag,
+.collection-v01.has-text-overlay  .cls_name,
+.elementor-1675.wp-theme-ovinx .themesflat-boxed .elementor-element.elementor-element-f237a3c .collection-v01.elementor-repeater-item-5410bf1 .cls_name,
+.elementor-1675.wp-theme-ovinx .themesflat-boxed .elementor-element.elementor-element-f237a3c .collection-v01.elementor-repeater-item-5410bf1 .cls_tag {
+    color: #fff !important;
 }
 
 .tf-btn-swiper-main {
@@ -10459,8 +10616,8 @@ color: #AAB0BB;
 .tf-dropdown-select.type-languages > .dropdown-menu {
   width: 150px !important;
 }
-.wpcf7 form .wpcf7-response-output {
-    position: absolute;
+.tf-product-info-heading .tf-product-progress-sale.product-info-progress-sale {
+  margin-bottom: 20px;
 }
 .tf-dropdown-select.style-2 > .dropdown-toggle {
   padding: 8px 15px;
@@ -11520,6 +11677,27 @@ select.hide-select {
   gap: 16px;
   margin-bottom: 16px;
 }
+.list-order-product .order-item .inner-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.list-order-product .order-item .inner-group .tf-select {
+    width: 200px;
+}
+
+.list-order-product .order-item .inner-group select {
+    padding: 2px 10px;
+    font-size: 14px;
+}
+
+.list-order-product .order-item .content-right {
+  display: flex;
+  align-items: center;
+    gap: 10px 50px;
+    flex-wrap: wrap;
+}
+
 .list-order-product .order-item:not(:last-child) {
   border-bottom: 1px solid var(--line);
   padding-bottom: 15px;
@@ -11527,6 +11705,7 @@ select.hide-select {
 .list-order-product .img-prd {
   overflow: hidden;
   max-width: 100px;
+  flex-shrink: 0;
 }
 .list-order-product .img-prd img {
   aspect-ratio: 1;
@@ -12760,12 +12939,16 @@ select.hide-select {
   background: transparent;
   color: var(--bg);
   font-size: 20px;
-  border: none;
   text-decoration: unset;
+  width: 32px;
+  height: 32px;
+  display: flex;
 }
 
 .single-content_body .tf-social-icon .social-item:hover {
-  color: var(--primary);
+  color: #fff;
+  background: var(--bg);
+  border-color: var(--bg);
 }
 
 .comment-respond .checkbox-wrap {
@@ -13216,6 +13399,7 @@ select.hide-select {
   .filter-vehicle .btn-action_submit {
     --h: 44px;
   }
+
 }
 
 @media (max-width: 425px) {
@@ -14055,6 +14239,44 @@ line-height: 22px;
 
 .products-content .woocommerce-pagination.ovinx-shop-pagination {
   margin-top: 30px;
+}
+
+/* Shop "Load More" / auto-load footer: "Showing X of Y products" + a progress line (width comes from
+   the inline --pagi-info-line-width set by pagination.php / class-woo-hook.php) above the button.
+   The button itself follows ground truth (`.btn-loadmore.tf-btn.tf-loading.loadmore`, which already
+   hides the spinner until `.loading`). Ported from amerce's .amerce-shop-pagination, simplified. */
+/* After the last Load More / auto-load batch the AJAX handler empties the wrapper — hide the leftover nav (and its margin). */
+.ovinx-shop-pagination:has(> .ovinx-pagi-wrapper:empty) {
+  display: none;
+}
+.ovinx-shop-pagination .showing-total-info {
+    position: relative;
+    display: block;
+    min-width: 185px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-secondary);
+}
+.ovinx-shop-pagination .showing-total-info .pagi-info-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--line);
+}
+.ovinx-shop-pagination .showing-total-info .pagi-info-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--pagi-info-line-width, 0%);
+  background-color: var(--text-primary);
+  transition: width 0.3s linear;
 }
 
 .tf-pagination .page-numbers {
@@ -15422,6 +15644,10 @@ font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
+}
+/* "{total_sales} Sold -" part of the Customizer sub-text (`.percent-sold`) — ground truth wraps it in .cl-text-main */
+.tf-product-info-wrap .tf-product-progress-sale .percent-sold {
+  color: var(--text-primary);
 }
 .tf-product-info-wrap .tf-product-delivery {
   display: grid;
@@ -16853,29 +17079,19 @@ line-height: 26px;
 }
 @media (max-width: 767px) {
   .tf-cart_item {
-    margin-bottom: 15px;
-    padding-inline-start: 94px;
-    min-height: 140px;
-    display: block;
-    font-weight: 500;
-    position: relative;
+        margin-bottom: 15px;
+        display: block;
+        font-weight: 500;
+        position: relative;
   }
   .tf-cart_item .wg-quantity {
     min-width: 110px;
     padding: 6px 10px;
   }
-  .tf-cart_item .img-prd {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-    width: 80px;
-    flex-shrink: 0;
-    border: 1px solid var(--line);
-  }
+    .tf-cart_item .img-prd {
+        width: 80px;
+        flex-shrink: 0;
+    }
   .tf-cart_item .img-prd img {
     aspect-ratio: 1;
     width: 100%;
@@ -16883,12 +17099,10 @@ line-height: 26px;
     object-fit: cover;
   }
   .tf-cart_item td {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 10px 0;
-    margin: 0;
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        margin: 0;
   }
   .tf-cart_item td:not(:last-child) {
     border-bottom: 1px solid var(--line);
@@ -18025,6 +18239,13 @@ border: 1px solid #FFFFFF1A;
   .modal-quickadd .modal-content {
     padding: 20px 15px;
   }
+    .list-order-product .order-item .inner-group .tf-select {
+    width: 100%;
+}
+.single-product .tfwc-page-title .main-page-title {
+    align-items: center !important;
+    flex-wrap: unset;
+}
 }
 .tf-product-quick_add {
   display: grid;
@@ -18833,13 +19054,46 @@ line-height: 26px;
     align-items: center;
     justify-content: center;
 }
+.added_to_cart.wc-forward {
+  display: none;
+}
 @media (max-width: 767px) {
+
+.tf-page-cart-main .each-prd td:last-child {
+  border: none;
+}
+
+.group-btn-cart {
+  width: 100%;
+}
+
+.group-btn-cart button {
+  flex: 1;
+}
+
+    .tf-page-cart-main .table-shop-cart tr:not(:last-child) {
+        border-bottom: 1px solid var(--line);
+    }
+
 .tf-search-wrapper .tf-search-btn {
 position: absolute;
     right: 15px;
     bottom: 15px;
     width: 35px;
     height: 35px;
+}
+.tf-shop-control .tf-btn-filter {
+  width: 100%;
+    order: 2;
+}
+.tf-shop-control .tf-control-layout {
+  order: 1;
+}
+.tf-shop-control  .tf-dropdown-sort .btn-select {
+    padding-left: 0;
+}
+  .account-auth {
+    max-width: 100%;
 }
 .tf-search-top-wrapper .most-keywords-wrap {
   display: none;
@@ -19149,7 +19403,7 @@ body[class*="elementor-kit-"] {
 }
 @media (min-width: 992px) {
   .account-auth {
-    margin: 60px auto 80px;
+    margin: 0 auto;
     padding: 40px;
   }
 }
@@ -19194,6 +19448,10 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
   margin-right: auto;
 }
 
+.woocommerce-notices-wrapper {
+  padding: 0 15px;
+}
+
 /* product-style_list-2 square add-to-cart: WooCommerce injects a 'View cart' link after an AJAX add — the mini-cart offcanvas already opens, so hide it */
 .product-style_list-2 .added_to_cart { display: none !important; }
 
@@ -19205,7 +19463,7 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 8px;
   margin: 0 0 24px;
   padding: 14px 20px 14px 52px;
   list-style: none;
@@ -19216,7 +19474,7 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
   background-color: #f1faf4;
   border: 1px solid #b7e4c7;
   border-left: 4px solid #137a39;
-  border-radius: 8px;
+  border-radius: 0px;
 }
 .woocommerce-message::before,
 .woocommerce-info::before,
@@ -19241,13 +19499,13 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
 .woocommerce-info {
   background-color: #f2f6fd;
   border-color: #c3d4f5;
-  border-left-color: #2f5fc4;
+  border-left-color: var(--bg);
 }
 .woocommerce-info::before {
   content: "i";
   font-family: inherit;
   font-style: italic;
-  background-color: #2f5fc4;
+  background-color: var(--bg);
 }
 .woocommerce-error {
   flex-direction: column;
@@ -19271,7 +19529,7 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
 .woocommerce-message a:not(.button),
 .woocommerce-info a:not(.button),
 .woocommerce-error a:not(.button) {
-  color: var(--primary);
+  color: var(--bg);
   text-decoration: underline;
 }
 /* "View cart" / "Undo" action link inside the notice → compact button pushed to the right */
@@ -19325,6 +19583,15 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
   .tf-simple-form > .group-btn {
     flex-wrap: wrap;
     row-gap: 8px;
+  }
+  .tf-header.tf-header-landing.header-default .header-center.xl-justify-content-center {
+    display: none;
+  }
+  .tf-header.tf-header-landing.header-default .header-left {
+    justify-content: space-between;
+  }
+  .tf-header.tf-header-landing.header-default .header-left .logo-header {
+        margin-right: -60px;
   }
   .variant-quantity .group-btn .btn-add-to-cart,
   .tf-simple-form > .group-btn .btn-add-to-cart {
@@ -19578,6 +19845,34 @@ form.cart:has(.single_add_to_cart_button.wc-variation-is-unavailable) :is(.singl
   pointer-events: all;
 }
 
+/* UX-001b: Esc closes an open sub-menu (js/main.js mainMenuKeyboard adds .is-dismissed). The #mainnav prefix makes these
+   win over both the :hover and the :focus-visible rules above, so the panel stays shut while the pointer / focus is still on it. */
+#mainnav .menu-item.is-dismissed > .sub-menu {
+  transform: scaleY(0);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#mainnav .menu-item.is-dismissed > .sub-menu .sub-menu_list li {
+  opacity: 0;
+  visibility: hidden;
+}
+#mainnav .menu-item.is-dismissed > .item-link::after {
+  display: none;
+}
+#mainnav .menu-item.is-dismissed > .item-link .icon {
+  transform: none;
+}
+#mainnav .has-menu-lv2.is-dismissed > .sub-menu-lv2 {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#mainnav .has-menu-lv2.is-dismissed::after {
+  opacity: 0;
+  visibility: hidden;
+}
+
 /* UX-002: product-card actions (wishlist / compare / quick view / quick add) only appeared on :hover. */
 .card-product:has(:focus-visible)::after {
   border-color: var(--text-primary);
@@ -19698,6 +19993,9 @@ form.cart:has(.single_add_to_cart_button.wc-variation-is-unavailable) :is(.singl
     content: "";
     position: absolute;
     inset: -13px;
+  }
+  .tf-sticky-atc-form {
+    flex-wrap: wrap;
   }
 }
 

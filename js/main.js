@@ -959,6 +959,96 @@
                 t.click();
             }
         });
+
+        mainMenuKeyboard();
+    };
+
+    // Desktop main menu. The sub-menus open from CSS (:hover / :focus-visible) so they had no way to be closed from the keyboard
+    // (WCAG 2.1.2 No Keyboard Trap, 1.4.13 Dismissible, 4.1.2 State): Esc closes the open level and returns focus to its parent,
+    // ArrowDown opens it again, and the parent link exposes aria-haspopup / aria-expanded. `.is-dismissed` is what hides it (CSS).
+    var mainMenuKeyboard = function () {
+        var $nav = $('#mainnav');
+        if (!$nav.length) {
+            return;
+        }
+        var $tops = $nav.find('.box-nav-menu > li').filter(function () {
+            return $(this).children('.sub-menu').length > 0;
+        });
+        if (!$tops.length) {
+            return;
+        }
+        $tops.children('.item-link').attr({ 'aria-haspopup': 'true', 'aria-expanded': 'false' });
+
+        var isOpen = function ($panel) {
+            return $panel.length > 0 && $panel.css('visibility') === 'visible' && parseFloat($panel.css('opacity')) > 0;
+        };
+        var syncTimer;
+        // The panels fade for 300ms (CSS), so read their state after the transition, debounced.
+        var syncExpanded = function () {
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(function () {
+                $tops.each(function () {
+                    $(this).children('.item-link').attr('aria-expanded', isOpen($(this).children('.sub-menu')) ? 'true' : 'false');
+                });
+            }, 350);
+        };
+
+        $nav.on('keydown', function (e) {
+            var t = e.target;
+            var $t = $(t);
+            var $top = $t.closest('.box-nav-menu > li');
+            if (!$top.length || !$top.children('.sub-menu').length) {
+                return;
+            }
+
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                // Deepest level first: Esc inside a flyout (.sub-menu-lv2) closes only that flyout.
+                var $lv2 = $t.closest('.has-menu-lv2');
+                if ($lv2.length && !$lv2.hasClass('is-dismissed') && isOpen($lv2.children('.sub-menu-lv2'))) {
+                    $lv2.addClass('is-dismissed');
+                    $lv2.children('.sub-menu_link').trigger('focus');
+                } else if (isOpen($top.children('.sub-menu'))) {
+                    $top.addClass('is-dismissed');
+                    $top.children('.item-link').trigger('focus');
+                } else {
+                    return;
+                }
+                e.preventDefault();
+                e.stopPropagation();
+                syncExpanded();
+                return;
+            }
+
+            if ((e.key === 'ArrowDown' || e.key === 'Down') && $t.is($top.children('.item-link'))) {
+                e.preventDefault();
+                $top.removeClass('is-dismissed');
+                setTimeout(function () {
+                    $top.children('.sub-menu').find('a[href]').first().trigger('focus');
+                }, 30);
+                syncExpanded();
+            }
+        });
+
+        // Re-arm the menu once the pointer / focus has left it, so the next hover or Tab opens it normally again.
+        $tops.on('mouseleave', function () {
+            var $li = $(this);
+            if (!$li[0].contains(document.activeElement)) {
+                $li.removeClass('is-dismissed').find('.is-dismissed').removeClass('is-dismissed');
+            }
+        });
+        $tops.on('focusout', function (e) {
+            var next = e.relatedTarget;
+            var li = this;
+            if (next && !li.contains(next)) {
+                $(li).removeClass('is-dismissed').find('.is-dismissed').removeClass('is-dismissed');
+            }
+        });
+        $nav.on('focusin focusout mouseover mouseout', syncExpanded);
+        $nav.find('.has-menu-lv2').on('mouseleave', function () {
+            if (!this.contains(document.activeElement)) {
+                $(this).removeClass('is-dismissed');
+            }
+        });
     };
 
     // Dom Ready

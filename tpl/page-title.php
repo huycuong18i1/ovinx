@@ -250,7 +250,7 @@ if( function_exists('is_product') && is_product()){
  
             </div>
 
-            <?php if ($page_title_description == 1 && !is_singular(['post', 'product'])): ?>
+            <?php if ($page_title_description == 1 && !empty($page_title_description_content) && !is_singular(['post', 'product'])): ?>
                 <p class="text-body-02">
                     <?php echo wp_kses_post($page_title_description_content); ?>
                 </p>

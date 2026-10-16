@@ -299,7 +299,7 @@ if ( is_cart() && isset($_GET[themesflat_get_opt('tf_buy_now_query_arg')]) && fu
 									</div>
 								<?php } ?>
 
-								<div class="d-flex align-items-center gap-12">
+								<div class="d-flex align-items-center gap-12 group-btn-cart">
 									<button type="submit" class="button tf-btn radius-6 btn-out-line-dark-2 tf-update-cart-btn" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'ovinx' ); ?>"><?php esc_html_e( 'Update cart', 'ovinx' ); ?></button>
 									<button type="submit" class="tf-btn style-stroke px-v1 clear-file-delete" name="tf_clear_cart" value="1"><?php esc_html_e( 'Clear All', 'ovinx' ); ?></button>
 								</div>

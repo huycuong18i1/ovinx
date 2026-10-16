@@ -10,7 +10,6 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_reset_password_form' );
 ?>
-<div class="container">
 	<div class="account-auth">
 		<div class="account-auth__panel is-active">
 			<div class="modal-heading text-center">
@@ -45,6 +44,5 @@ do_action( 'woocommerce_before_reset_password_form' );
 			</form>
 		</div>
 	</div>
-</div>
 <?php
 do_action( 'woocommerce_after_reset_password_form' );

@@ -1029,11 +1029,11 @@ function themesflat_custom_styles( $custom ) {
 		$custom .= '@media (max-width: 767px) {';
 
 			if ( themesflat_get_opt( 'show_promo_bar_mobile' ) != 1 ) {
-				$custom .= ".tf-promo-bar { display:none !important; } "."\n";
+				$custom .= ".tf-promo-bar, .tf-slider-promo { display:none !important; } "."\n";
 			}
 
 			if ( themesflat_get_opt( 'show_top_bar_mobile' ) != 1 ) {
-				$custom .= ".tf-topbar { display:none !important; } "."\n";
+				$custom .= ".tf-topbar:not(.tf-slider-promo) { display:none !important; } "."\n";
 			}
 
 			if ( themesflat_get_opt( 'btn_login_mobile' ) != 1 ) {

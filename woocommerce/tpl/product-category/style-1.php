@@ -70,7 +70,7 @@
 
 <section class="section-category flat-spacing-2 tf-btn-swiper-main">
     <div class="container">
-        <div class="swiper tf-swiper ovinx-swiper wrap-sw-over-2" data-preview="<?php echo esc_attr($category_dek); ?>" data-tablet="<?php echo esc_attr($category_tab); ?>" data-mobile-sm="<?php echo esc_attr($category_mob_sm); ?>" data-mobile="<?php echo esc_attr($category_mob); ?>" data-space-lg="30"
+        <div class="swiper tf-swiper ovinx-swiper wrap-sw-over-2" data-preview="<?php echo esc_attr($category_dek); ?>" data-tablet="<?php echo esc_attr($category_tab); ?>" data-mobile-sm="1.7" data-mobile="<?php echo esc_attr($category_mob); ?>" data-space-lg="30"
             data-space-md="20" data-space="10" data-pagination="<?php echo esc_attr( max( 1, (int) $category_mob ) ); ?>" data-pagination-sm="<?php echo esc_attr( max( 1, (int) $category_mob_sm ) ); ?>" data-pagination-md="<?php echo esc_attr( max( 1, (int) $category_tab ) ); ?>" data-pagination-lg="<?php echo esc_attr( max( 1, (int) $category_dek ) ); ?>"
         >
             <div class="swiper-wrapper">

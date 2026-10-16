@@ -9,7 +9,6 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_lost_password_confirmation_message' );
 ?>
-<div class="container">
 	<div class="account-auth">
 		<div class="account-auth__panel is-active text-center">
 			<div class="modal-heading text-center">
@@ -24,6 +23,5 @@ do_action( 'woocommerce_before_lost_password_confirmation_message' );
 			</div>
 		</div>
 	</div>
-</div>
 <?php
 do_action( 'woocommerce_after_lost_password_confirmation_message' );

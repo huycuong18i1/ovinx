@@ -126,7 +126,7 @@ if ( $total_products > 0 ) {
 				Showing <?php echo esc_html($end); ?> of <?php echo esc_html($total_products); ?> products
 				<span class="pagi-info-line"> </span>
 			</span>
-			<button id="load-more-btn" class="tf-btn btn-outline-dark2 tf-loading-2 loadmore" data-page="2">
+			<button id="load-more-btn" class="btn-loadmore tf-btn tf-loading loadmore" data-page="2">
 				<span class="text"><?php echo esc_html($shop_loadmore_text)?></span>
 				<div class="spinner-circle" style="">
 					<span class="spinner-circle1 spinner-child"></span>

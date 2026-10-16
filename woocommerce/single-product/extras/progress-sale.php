@@ -34,33 +34,33 @@ if ($stock_quantity <= $low_stock_threshold){
 
 ?>
 
-<div class="product-info-progress-sale">
-    <div class="title-left">
-        <span class=""><?php echo esc_html($text); ?></span>
+<?php
+/**
+ * Markup follows ground truth `ovinx-html/product-stock-bar.html` (`.tf-product-progress-sale`: title ->
+ * `.progress-cart` bar -> sold/left line) so the theme's existing CSS styles it. `product-info-progress-sale`
+ * is kept only as the JS hook (single-product.js animates `.value` to its `data-progress`).
+ */
+?>
+<div class="tf-product-progress-sale product-info-progress-sale">
+    <p class="title fw-semibold text-uppercase cl-text-main mb-8"><?php echo esc_html($text); ?></p>
+
+    <div class="progress-cart mb-4">
+        <div class="value <?php echo esc_attr($status_class); ?>" style="width: 0%;" data-progress="<?php echo esc_attr($percent_left); ?>"></div>
     </div>
-    <div class="progress-right">
 
-        <div class="progress-cart">
-            <div class="value <?php echo esc_attr($status_class); ?>" style="width: 0%;" data-progress="<?php echo esc_attr($percent_left); ?>"></div>
-        </div>
-
-        <span class="infor_sold">
-            <?php
-            
-            echo wp_kses(
-                strtr($sub_text, [
-                    '{total_sales}' => "{$total_sales}",
-                    '{count}'  => "<span class='count'>{$stock_quantity}</span>",
-                ]),
-                [
-                    'span' => [
-                        'class' => true
-                    ]
+    <p class="infor_sold">
+        <?php
+        echo wp_kses(
+            strtr($sub_text, [
+                '{total_sales}' => "{$total_sales}",
+                '{count}'  => "<span class='count'>{$stock_quantity}</span>",
+            ]),
+            [
+                'span' => [
+                    'class' => true
                 ]
-            );
-            
-            ?>
-        </span>
-
-    </div>
+            ]
+        );
+        ?>
+    </p>
 </div>
