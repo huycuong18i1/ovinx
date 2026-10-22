@@ -37,7 +37,7 @@ $promo_slides_json = json_decode($promo_slides_arr, true);
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-8">
+                        <div class="col-lg-6 col-8">
                             <div dir="ltr" class="swiper tf-swiper swiper-topbar default" data-touch="false" data-auto="true" data-loop="true" data-speed="1500">
                                 <div class="swiper-wrapper">
                                     <?php if ( ! empty( $promo_slides_json ) ) : foreach ( $promo_slides_json as $value ) : ?>

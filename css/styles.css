@@ -19649,6 +19649,9 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
   .tf-header.header-v2.header-02 {
     border-bottom: 1px solid var(--line);
   }
+  .section-shoping-cart .woocommerce-cart-form__contents {
+    overflow-x: scroll;
+  }
 }
 
 @media (max-width: 991px) {
@@ -19662,7 +19665,6 @@ body.woocommerce-account:not(.logged-in) .woocommerce-notices-wrapper:has(.wooco
     position: relative;
   }
   .btn-open-menu::after,
-  .nav-icon-item:not(.nav-account .nav-icon-item)::after,
   .tf-btn-tab::after,
   .logo-site::after,
   .social-item::after,
